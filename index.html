@@ -2,751 +2,1381 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>PETTILY — My Little Pet World</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>PETTILY</title>
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --pink:#ffb8cf;--pink2:#ffe5ee;--blue:#b9ddff;--blue2:#eaf6ff;
-  --purple:#cfc4ff;--yellow:#ffe39a;--green:#c8edcf;
-  --ink:#34313a;--muted:#8f8993;--white:#fff;
+  --pink:#ff9fc4;--pink2:#ffe5ef;--blue:#9fd9ff;--mint:#b9efd9;
+  --yellow:#ffe28a;--purple:#cdb8ff;--ink:#30333d;--muted:#8d909b;
+  --white:#fff;--shadow:0 12px 35px rgba(57,45,68,.10)
 }
 body{
-  margin:0;background:linear-gradient(145deg,#fff2f7,#eef8ff);
-  font-family:Arial,"Noto Sans KR",sans-serif;color:var(--ink);
+  margin:0;background:linear-gradient(145deg,#fff4f8,#eef8ff);
+  font-family:Arial,"Noto Sans KR",sans-serif;color:var(--ink)
 }
 button{font:inherit;border:0;cursor:pointer}
 #app{
-  width:min(480px,100vw);height:100vh;margin:auto;background:#fff;
-  position:relative;overflow:hidden;box-shadow:0 0 35px #00000012;
+  width:min(100%,480px);height:100dvh;margin:auto;background:#f9fbff;
+  position:relative;overflow:hidden;box-shadow:0 0 45px #ccd8e655
 }
 header{
-  height:66px;padding:14px 18px;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid #eee;background:#fff;
+  height:64px;background:#fff;display:flex;align-items:center;
+  justify-content:space-between;padding:0 18px;border-bottom:1px solid #eee;
+  position:absolute;top:0;left:0;right:0;z-index:20
 }
-.logo{font-weight:900;font-size:22px;letter-spacing:-1px}
+.logo{font-size:21px;font-weight:900;letter-spacing:-1px}
 .wallet{display:flex;gap:7px}
-.money{padding:7px 10px;border-radius:20px;background:#fff5c9;font-size:12px;font-weight:800}
-.gem{background:#eee8ff}
-main{height:calc(100vh - 126px);overflow:auto;padding:15px 15px 30px}
-.page{display:none}.page.active{display:block}
-.hero{
-  background:linear-gradient(145deg,#ffe5ef,#edf7ff);
-  border-radius:27px;padding:18px;position:relative;overflow:hidden;
+.wallet span{
+  background:#f5f6fa;border-radius:20px;padding:7px 10px;font-size:12px;font-weight:800
 }
-.hello{font-size:13px;color:#8e8290;font-weight:700}
-.hero h1{margin:5px 0 2px;font-size:25px}
-.hero p{margin:0;color:#8c8790;font-size:12px}
-.petStage{
-  height:255px;margin-top:12px;border-radius:25px;
-  background:linear-gradient(#dff3ff 0 63%,#d8f1d8 63%);
-  position:relative;display:flex;align-items:center;justify-content:center;
-  overflow:hidden;
+#screen{
+  position:absolute;top:64px;bottom:70px;left:0;right:0;
+  overflow-y:auto;overflow-x:hidden;padding:16px
 }
-.sun{position:absolute;width:55px;height:55px;background:#ffe39c;border-radius:50%;right:22px;top:20px}
-.cloud{position:absolute;width:90px;height:28px;border-radius:30px;background:#fff;left:18px;top:35px;opacity:.8}
-.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
-.cloud:before{width:35px;height:35px;left:16px;top:-16px}
-.cloud:after{width:45px;height:45px;left:42px;top:-23px}
-.petWrap{width:175px;height:175px;position:relative;z-index:3}
-.petWrap svg{width:100%;height:100%;overflow:visible}
-.petShadow{position:absolute;width:110px;height:20px;background:#0002;border-radius:50%;bottom:29px}
-.petName{text-align:center;font-weight:900;margin-top:7px}
-.petMeta{text-align:center;font-size:11px;color:#8d8790;margin-top:3px}
-.statusGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:13px}
-.stat{
-  background:#fafafa;border-radius:15px;padding:8px 5px;text-align:center;font-size:10px;
-}
-.bar{height:5px;background:#eee;border-radius:9px;margin-top:5px;overflow:hidden}
-.bar i{display:block;height:100%;border-radius:9px}
-.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-.action{
-  padding:11px 3px;border-radius:17px;background:#fff4f8;font-weight:800;
-  font-size:12px;transition:.12s;box-shadow:0 2px 8px #00000008;
-}
-.action:active{transform:scale(.94)}
-.action.blue{background:#edf8ff}
-.action.yellow{background:#fff8df}
-.action.purple{background:#f2efff}
-.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:19px 2px 9px}
-.sectionTitle b{font-size:16px}.sectionTitle span{font-size:11px;color:#999}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+#screen::-webkit-scrollbar{width:0}
+.page{display:none;animation:page .25s ease}
+.page.active{display:block}
+@keyframes page{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+h1{font-size:27px;margin:5px 0 4px}
+h2{font-size:18px;margin:20px 0 10px}
+.sub{font-size:12px;color:var(--muted)}
 .card{
-  background:#fff;border:1px solid #f0edf0;border-radius:19px;padding:13px;
-  box-shadow:0 4px 15px #00000007;
+  background:#fff;border-radius:22px;padding:15px;margin-bottom:12px;
+  box-shadow:var(--shadow)
 }
-.card button{width:100%;padding:9px;border-radius:12px;background:#f5f5f5;font-weight:800;font-size:12px}
-.quest{display:flex;gap:10px;align-items:center}
-.questIcon{width:40px;height:40px;border-radius:13px;background:#fff0f5;display:grid;place-items:center;font-size:19px}
-.quest b{font-size:12px}.quest small{color:#aaa}
-nav{
-  height:60px;background:#fff;border-top:1px solid #eee;display:grid;
-  grid-template-columns:repeat(5,1fr);position:absolute;bottom:0;left:0;right:0;
+.btn{
+  padding:11px 15px;border-radius:14px;background:#f2f3f7;
+  font-weight:800;color:var(--ink)
 }
-.navBtn{background:#fff;color:#aaa;font-size:10px;font-weight:800}
-.navBtn strong{display:block;font-size:19px;margin-bottom:2px}
-.navBtn.active{color:#ef87a9}
-.petGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.petCard{
-  border:1px solid #eee;border-radius:19px;padding:9px;background:#fff;
-  position:relative;overflow:hidden;
+.btn.pink{background:var(--pink);color:#fff}
+.btn.blue{background:var(--blue)}
+.btn.yellow{background:var(--yellow)}
+.btn.mint{background:var(--mint)}
+.btn.dark{background:#343741;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.center{text-align:center}
+.bottom{
+  height:70px;background:#fff;position:absolute;bottom:0;left:0;right:0;
+  display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #eee;z-index:20
 }
-.petThumb{height:105px;border-radius:14px;background:#f4f8ff;display:grid;place-items:center}
-.petThumb svg{width:88px;height:88px}
-.petCard b{font-size:12px;display:block;margin-top:6px}
-.rarity{font-size:9px;font-weight:900;margin-top:2px}
-.common{color:#999}.uncommon{color:#4da77b}.rare{color:#5595dd}
-.epic{color:#9a72df}.legendary{color:#df9d30}.mythic{color:#e05eaa}
-.shopGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.shopItem{padding:13px;border-radius:20px;background:#fafafa;text-align:center}
-.shopIcon{font-size:35px;height:58px;display:grid;place-items:center}
-.shopItem b{font-size:13px}.shopItem small{display:block;color:#999;margin:3px}
-.shopItem button{padding:8px 13px;border-radius:12px;background:#fff;font-weight:800;font-size:11px}
-.worldGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.world{
-  min-height:125px;border-radius:23px;padding:14px;position:relative;overflow:hidden;
+.tab{
+  background:#fff;color:#9a9ca5;font-size:10px;font-weight:800;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px
 }
-.world h3{margin:0;font-size:17px}.world p{font-size:10px;color:#777}
-.world button{padding:8px 12px;background:#fff;border-radius:12px;font-size:11px;font-weight:800}
-.modalBack{
-  display:none;position:absolute;inset:0;background:#0005;z-index:100;
-  align-items:flex-end;
+.tab b{font-size:21px}.tab.active{color:#ff78aa}
+
+/* HOME */
+.hero{
+  background:linear-gradient(135deg,#ffdce9,#dff2ff);
+  border-radius:28px;padding:20px;min-height:235px;position:relative;overflow:hidden
 }
-.modalBack.show{display:flex}
-.modal{
-  background:#fff;border-radius:28px 28px 0 0;width:100%;max-height:88%;
-  overflow:auto;padding:20px;animation:up .25s ease;
+.hero:before,.hero:after{
+  content:"";position:absolute;border-radius:50%;background:#fff5;filter:blur(2px)
 }
-.modal h2{margin:0 0 5px}.modalSub{color:#999;font-size:12px;margin-bottom:15px}
-.close{float:right;background:#f3f3f3;border-radius:50%;width:32px;height:32px}
-.modalBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.modalBtns button{padding:12px;border-radius:14px;background:#f7edf2;font-weight:800}
-.toast{
-  position:absolute;z-index:1000;left:50%;top:78px;transform:translateX(-50%);
-  background:#34313a;color:#fff;padding:10px 15px;border-radius:20px;
-  font-size:12px;font-weight:800;opacity:0;pointer-events:none;white-space:nowrap;
+.hero:before{width:150px;height:150px;right:-35px;top:-45px}
+.hero:after{width:90px;height:90px;left:-25px;bottom:-25px}
+.pet-stage{
+  height:155px;display:flex;justify-content:center;align-items:center;position:relative
 }
-.toast.show{animation:toast .9s ease}
-.fxLayer{position:absolute;inset:0;pointer-events:none;z-index:999;overflow:hidden}
-.bubble,.heart,.star,.foodParticle,.zzz{
-  position:absolute;pointer-events:none;font-style:normal;
+.pet-art{width:145px;height:145px;filter:drop-shadow(0 12px 8px #77889933)}
+.pet-name{text-align:center;font-size:18px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
+.stat{background:#ffffffaa;border-radius:13px;padding:8px;text-align:center;font-size:10px}
+.stat strong{display:block;font-size:13px;margin-bottom:4px}
+.action-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.action{
+  background:#fff;border-radius:17px;padding:11px 4px;text-align:center;
+  box-shadow:var(--shadow);font-size:11px;font-weight:800
 }
-.bubble{
-  border:2px solid #8ed4f0;background:#fff8;border-radius:50%;
-  animation:bubble .8s ease-out forwards;
+.action span{display:block;font-size:22px;margin-bottom:5px}
+
+/* PET */
+.pet-card{display:flex;align-items:center;gap:12px}
+.mini-art{width:74px;height:74px;background:#f5f6fa;border-radius:20px}
+.rarity{
+  display:inline-block;border-radius:9px;padding:4px 7px;font-size:9px;
+  font-weight:900;background:#eee
 }
-.heart{color:#ff82a7;font-size:18px;animation:heart .8s ease-out forwards}
-.star{color:#f2bd4e;font-size:21px;animation:star .7s ease-out forwards}
-.foodParticle{font-size:17px;animation:food .65s ease-out forwards}
-.zzz{font-weight:900;color:#7d8dd1;font-size:17px;animation:zzz .9s ease-out forwards}
-.fxEat{animation:eat .55s ease-in-out!important}
-.fxBath{animation:bath .55s ease-in-out!important}
-.fxPlay{animation:play .55s ease-in-out!important}
-.fxSleep{animation:sleep .7s ease-in-out!important}
-@keyframes bubble{0%{opacity:0;transform:translate(0,10px) scale(.3)}20%{opacity:1}100%{opacity:0;transform:translate(var(--x),-75px) scale(1.15)}}
-@keyframes heart{0%{opacity:0;transform:translateY(8px) scale(.4)}25%{opacity:1}100%{opacity:0;transform:translate(var(--x),-70px) scale(1.2)}}
-@keyframes star{0%{opacity:0;transform:scale(.2)}20%{opacity:1}100%{opacity:0;transform:translate(var(--x),-65px) rotate(140deg)}}
-@keyframes food{0%{opacity:0;transform:translateY(10px)}20%{opacity:1}100%{opacity:0;transform:translate(var(--x),-55px) rotate(20deg)}}
-@keyframes zzz{0%{opacity:0;transform:translateY(8px)}30%{opacity:1}100%{opacity:0;transform:translate(25px,-70px)}}
-@keyframes eat{25%{transform:translateY(-5px) scale(1.04)}50%{transform:translateY(1px) scale(.97)}75%{transform:translateY(-3px)}}
-@keyframes bath{25%{transform:translateX(-5px) rotate(-2deg)}50%{transform:translateX(5px) rotate(2deg)}75%{transform:translateX(-3px)}}
-@keyframes play{30%{transform:translateY(-10px) scale(1.04)}65%{transform:translateY(2px)}}
-@keyframes sleep{50%{transform:translateY(3px) scale(.98)}}
-@keyframes toast{0%{opacity:0;top:82px}15%{opacity:1;top:76px}80%{opacity:1}100%{opacity:0;top:67px}}
-@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
-input,select{
-  width:100%;padding:11px;border:1px solid #eee;border-radius:13px;
-  outline:0;background:#fafafa;margin:5px 0 10px;
+.bar{height:7px;background:#eee;border-radius:10px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:var(--pink);border-radius:10px}
+
+/* WORLD */
+.location-card{
+  min-height:135px;border-radius:25px;position:relative;overflow:hidden;
+  padding:17px;color:#fff;cursor:pointer;box-shadow:var(--shadow);margin-bottom:11px
 }
-.bigButton{
-  width:100%;padding:13px;border-radius:15px;background:#ffb8cf;
-  color:#fff;font-weight:900;margin-top:7px;
+.location-card h3{font-size:22px;margin:0 0 5px}
+.location-card p{font-size:11px;margin:0;opacity:.9}
+.location-card .loc-icon{font-size:50px;position:absolute;right:18px;bottom:10px}
+.town{background:linear-gradient(140deg,#ffb8c9,#ffcf9d)}
+.forest{background:linear-gradient(140deg,#75cda7,#398b73)}
+.beach{background:linear-gradient(140deg,#73d8ff,#ffdc98)}
+.night{background:linear-gradient(140deg,#292b63,#8d67ca)}
+.snow{background:linear-gradient(140deg,#a9ddff,#e9f7ff);color:#364c65}
+.sky{background:linear-gradient(140deg,#9bbcff,#dbb8ff)}
+
+/* LOCATION */
+.location-top{
+  margin:-16px -16px 15px;height:175px;position:relative;overflow:hidden;
+  padding:16px;color:#fff
 }
+.location-top h1{position:absolute;bottom:37px;left:17px}
+.location-top .loc-desc{position:absolute;bottom:15px;left:18px;font-size:11px}
+.scene{position:absolute;inset:0;overflow:hidden}
+.town-scene{background:linear-gradient(#ffd3df 0 58%,#a9dba1 58%)}
+.forest-scene{background:linear-gradient(#bdebdc 0 48%,#599d6e 48%)}
+.beach-scene{background:linear-gradient(#92ddff 0 48%,#f6d69a 48%)}
+.night-scene{background:linear-gradient(#171934 0 60%,#25294d 60%)}
+.snow-scene{background:linear-gradient(#bde7ff 0 56%,#edf8ff 56%)}
+.sky-scene{background:linear-gradient(#91caff,#d8c4ff)}
+.sun,.moon{
+  position:absolute;width:48px;height:48px;border-radius:50%;right:35px;top:25px
+}
+.sun{background:#fff0a0;box-shadow:0 0 30px #fff5a5}
+.moon{background:#fff;border:6px solid #d4d8ff;box-shadow:0 0 25px #fff}
+.building{
+  position:absolute;bottom:0;width:58px;height:72px;background:#fff;
+  border-radius:7px 7px 0 0;box-shadow:inset 0 -10px #f4a5ba
+}
+.b1{left:25px}.b2{left:95px;height:92px}.b3{right:35px;height:62px}
+.window{position:absolute;width:12px;height:16px;background:#b7dfff;top:15px;left:12px;box-shadow:22px 0 #b7dfff}
+.tree{
+  position:absolute;bottom:0;width:22px;height:75px;background:#775842;border-radius:8px
+}
+.tree:before{
+  content:"";position:absolute;width:75px;height:75px;border-radius:50%;
+  background:#4b9b69;left:-26px;top:-45px
+}
+.t1{left:20px}.t2{right:30px}
+.wave{position:absolute;left:0;right:0;bottom:42%;height:10px;border-radius:50%;border-top:3px solid #fff8}
+.snowball{
+  position:absolute;width:60px;height:60px;background:#fff;border-radius:50%;bottom:10px;left:25px
+}
+.house{
+  position:absolute;width:82px;height:58px;background:#fff;bottom:0;left:40px;border-radius:5px
+}
+.house:before{
+  content:"";position:absolute;top:-32px;left:-10px;border-left:51px solid transparent;
+  border-right:51px solid transparent;border-bottom:36px solid #e9a6b8
+}
+.cloud{
+  position:absolute;background:#fff9;border-radius:40px;width:105px;height:32px
+}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff9;border-radius:50%}
+.cloud:before{width:45px;height:45px;left:18px;top:-22px}
+.cloud:after{width:55px;height:55px;right:15px;top:-28px}
+.c1{top:35px;left:25px}.c2{top:85px;right:5px}
+
+.npcs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.npc{
+  background:#fff;border-radius:21px;padding:12px;box-shadow:var(--shadow);
+  cursor:pointer
+}
+.npc-avatar{
+  height:95px;border-radius:16px;background:#f4f7fb;display:flex;
+  align-items:center;justify-content:center;margin-bottom:9px
+}
+.npc-avatar svg{width:85px;height:85px}
+.npc-name{font-weight:900}.npc-role{font-size:10px;color:#999;margin:3px 0 8px}
+.heartbar{font-size:10px;color:#ff79aa}
+.loc-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+/* HOUSE */
+.room{
+  height:385px;border-radius:25px;position:relative;overflow:hidden;
+  background:linear-gradient(#fdf6ed 0 68%,#d7b997 68%);
+  border:5px solid #fff;box-shadow:var(--shadow)
+}
+.wall-line{position:absolute;left:0;right:0;top:68%;height:5px;background:#b99170}
+.window-room{
+  position:absolute;top:35px;left:50%;transform:translateX(-50%);
+  width:105px;height:85px;border:7px solid #cba98e;background:#bfeaff
+}
+.window-room:before{content:"";position:absolute;top:50%;left:0;right:0;border-top:3px solid #cba98e}
+.window-room:after{content:"";position:absolute;top:0;bottom:0;left:50%;border-left:3px solid #cba98e}
+.empty-text{
+  position:absolute;top:160px;left:0;right:0;text-align:center;color:#c5b5a7;
+  font-weight:900
+}
+.furniture{
+  position:absolute;user-select:none;cursor:pointer;transform:translate(-50%,-50%);
+  filter:drop-shadow(0 7px 5px #0002)
+}
+.f-sofa{width:130px;height:57px;background:#f4a4bf;border-radius:17px}
+.f-bed{width:145px;height:82px;background:#fff;border:5px solid #c4a4e8;border-radius:13px}
+.f-table{width:75px;height:38px;background:#bd8d63;border-radius:50%}
+.f-rug{width:150px;height:65px;background:#b8dff1;border-radius:50%}
+.f-plant{font-size:50px}
+.f-lamp{font-size:50px}
+.f-books{font-size:45px}
+.room-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.item-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.decor-item{
+  background:#fff;border-radius:16px;padding:10px;text-align:center;
+  box-shadow:var(--shadow);font-size:11px;font-weight:800
+}
+.decor-item .preview{font-size:35px;height:43px}
+
+/* FARM */
+.farm{
+  background:linear-gradient(#bce7ff 0 42%,#89bf70 42%);height:360px;border-radius:25px;
+  position:relative;overflow:hidden
+}
+.plot{
+  position:absolute;width:90px;height:65px;background:#9b704e;border-radius:25px;
+  border:7px solid #75a75f;display:flex;align-items:center;justify-content:center;font-size:35px
+}
+.p1{left:20px;top:185px}.p2{left:125px;top:185px}.p3{left:230px;top:185px}
+.p4{left:72px;top:265px}.p5{left:180px;top:265px}
+.farm-house{position:absolute;right:20px;top:100px;width:90px;height:75px;background:#fff}
+.farm-house:before{content:"";position:absolute;top:-38px;left:-10px;border-left:55px solid transparent;border-right:55px solid transparent;border-bottom:42px solid #ed9eb3}
+
+/* SHOP */
+.shop-item{
+  background:#fff;border-radius:20px;padding:12px;box-shadow:var(--shadow);position:relative
+}
+.shop-preview{
+  height:90px;border-radius:15px;background:#f6f7fa;display:flex;align-items:center;justify-content:center;font-size:50px
+}
+.shop-item h3{font-size:13px;margin:8px 0 3px}
+.shop-item p{font-size:10px;color:#999;margin:0 0 8px}
+
+/* MODAL */
+#modal{
+  display:none;position:absolute;inset:0;background:#2227;z-index:50;
+  align-items:flex-end;justify-content:center
+}
+#modal.show{display:flex}
+.modal-box{
+  width:100%;background:#fff;border-radius:28px 28px 0 0;padding:20px;
+  max-height:82%;overflow:auto;animation:up .25s ease
+}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.close{background:#f1f2f5;width:35px;height:35px;border-radius:50%}
+.dialog{
+  background:#f7f8fb;border-radius:18px;padding:14px;margin:8px 0;
+  font-size:13px;line-height:1.55
+}
+.dialog.me{background:#ffe6f0;margin-left:35px}
+.dialog.npc{background:#edf6ff;margin-right:35px}
+
+/* EFFECT */
+#effects{position:absolute;inset:0;pointer-events:none;z-index:100}
+.fx{
+  position:absolute;font-size:24px;font-weight:900;animation:fx .8s ease forwards
+}
+@keyframes fx{
+  0%{opacity:0;transform:translateY(15px) scale(.7)}
+  25%{opacity:1}100%{opacity:0;transform:translateY(-65px) scale(1.15)}
+}
+.shake{animation:shake .7s ease}
+@keyframes shake{
+  20%{transform:translateX(-8px) rotate(-4deg)}
+  40%{transform:translateX(8px) rotate(4deg)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+
+/* TOAST */
+#toast{
+  position:absolute;left:50%;bottom:87px;transform:translateX(-50%) translateY(20px);
+  background:#30333d;color:#fff;padding:11px 16px;border-radius:18px;font-size:12px;
+  font-weight:800;opacity:0;pointer-events:none;z-index:110;white-space:nowrap;
+  transition:.25s
+}
+#toast.show{opacity:1;transform:translateX(-50%)}
 </style>
 </head>
+
 <body>
 <div id="app">
+
 <header>
-  <div class="logo">PETTILY ♡</div>
+  <div class="logo">PETTILY</div>
   <div class="wallet">
-    <div class="money">🪙 <span id="coins">500</span></div>
-    <div class="money gem">💎 <span id="gems">20</span></div>
+    <span>🪙 <b id="coins">1000</b></span>
+    <span>💎 <b id="gems">30</b></span>
   </div>
 </header>
 
-<main>
+<main id="screen">
+
+<!-- HOME -->
 <section id="home" class="page active">
   <div class="hero">
-    <div class="hello">GOOD MORNING, PET PARENT ✦</div>
-    <h1>오늘도 같이 놀자!</h1>
-    <p id="weatherText">맑은 날씨 · 기분 좋은 하루</p>
-
-    <div class="petStage" id="petStage">
-      <div class="sun"></div><div class="cloud"></div>
-      <div class="petShadow"></div>
-      <div class="petWrap" id="petMainArt"></div>
-      <div class="fxLayer" id="fxLayer"></div>
-    </div>
-
-    <div class="petName" id="petName">아직 펫이 없어요</div>
-    <div class="petMeta" id="petMeta">알을 열어 첫 번째 친구를 만나보세요!</div>
-
-    <div class="statusGrid">
-      <div class="stat">🍖 배고픔<div class="bar"><i id="hungerBar" style="width:100%;background:#f2ad75"></i></div></div>
-      <div class="stat">🫧 청결<div class="bar"><i id="cleanBar" style="width:100%;background:#70c9ed"></i></div></div>
-      <div class="stat">♡ 행복<div class="bar"><i id="happyBar" style="width:100%;background:#ef9db9"></i></div></div>
-      <div class="stat">⚡ 에너지<div class="bar"><i id="energyBar" style="width:100%;background:#a893e8"></i></div></div>
-    </div>
-
-    <div class="actions">
-      <button class="action" onclick="feedPet()">🍖<br>먹이기</button>
-      <button class="action blue" onclick="bathPet()">🫧<br>씻기</button>
-      <button class="action yellow" onclick="playPet()">🎾<br>놀기</button>
-      <button class="action purple" onclick="sleepPet()">💤<br>재우기</button>
-    </div>
+    <div class="sub">GOOD MORNING, PETTILY WORLD</div>
+    <div class="pet-stage" id="homePet"></div>
+    <div class="pet-name" id="homePetName">알을 부화해 주세요</div>
+    <div class="stats" id="homeStats"></div>
   </div>
 
-  <div class="sectionTitle"><b>오늘의 퀘스트</b><span onclick="openQuest()">전체 보기 ›</span></div>
-  <div id="questMini" class="cards"></div>
+  <h2>오늘의 케어</h2>
+  <div class="action-grid">
+    <button class="action" onclick="care('eat')"><span>🍓</span>먹이기</button>
+    <button class="action" onclick="care('bath')"><span>🫧</span>씻기기</button>
+    <button class="action" onclick="care('play')"><span>🎾</span>놀기</button>
+    <button class="action" onclick="care('sleep')"><span>💤</span>재우기</button>
+  </div>
 
-  <div class="sectionTitle"><b>빠른 메뉴</b></div>
-  <div class="cards">
-    <div class="card"><b>🥚 새로운 친구</b><p style="font-size:11px;color:#999">알을 부화시켜보세요!</p><button onclick="openEgg()">알 보기</button></div>
-    <div class="card"><b>🎁 데일리 보상</b><p style="font-size:11px;color:#999">매일 받을 수 있어요.</p><button onclick="dailyReward()">받기</button></div>
+  <h2>빠른 이동</h2>
+  <div class="grid2">
+    <button class="btn pink" onclick="go('world')">🗺️ 월드</button>
+    <button class="btn blue" onclick="openHouse()">🏠 집 꾸미기</button>
+    <button class="btn yellow" onclick="go('farm')">🌱 농장</button>
+    <button class="btn mint" onclick="go('shop')">🛍️ 상점</button>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <b>🎁 오늘의 보상</b>
+    <p class="sub">매일 한 번 받을 수 있어요.</p>
+    <button class="btn pink" onclick="dailyReward()">보상 받기 +100 🪙</button>
   </div>
 </section>
 
+<!-- PETS -->
 <section id="pets" class="page">
-  <div class="sectionTitle"><b>나의 펫 도감</b><span id="collectionCount">0 / 30</span></div>
-  <input id="petSearch" placeholder="🔎 펫 이름 검색..." oninput="renderCollection()">
-  <div class="petGrid" id="collection"></div>
+  <h1>MY PETS</h1>
+  <div class="sub">내가 만난 소중한 친구들</div>
+  <div id="petList" style="margin-top:15px"></div>
 </section>
 
+<!-- WORLD -->
 <section id="world" class="page">
-  <div class="sectionTitle"><b>펫 월드</b><span id="weatherSmall">☀️ Sunny</span></div>
-  <div class="worldGrid">
-    <div class="world" style="background:#e5f5ff"><h3>🏡 타운</h3><p>사람들과 펫들이 모이는 곳</p><button onclick="explore('타운')">탐험하기</button></div>
-    <div class="world" style="background:#e7f5e4"><h3>🌳 숲</h3><p>희귀한 보물을 찾아보세요</p><button onclick="explore('숲')">탐험하기</button></div>
-    <div class="world" style="background:#fff0d5"><h3>🏖️ 비치</h3><p>조개와 물고기를 발견할 수 있어요</p><button onclick="explore('비치')">탐험하기</button></div>
-    <div class="world" style="background:#eee9ff"><h3>🌙 나이트시티</h3><p>밤에만 열리는 특별한 장소</p><button onclick="explore('나이트시티')">탐험하기</button></div>
-    <div class="world" style="background:#e7f0ff"><h3>❄️ 스노우 빌리지</h3><p>차가운 겨울 마을</p><button onclick="explore('스노우 빌리지')">탐험하기</button></div>
-    <div class="world" style="background:#f2e7ff"><h3>☁️ 스카이 아일랜드</h3><p>구름 위의 비밀 섬</p><button onclick="explore('스카이 아일랜드')">탐험하기</button></div>
-  </div>
-  <div class="sectionTitle"><b>🎮 미니게임</b></div>
-  <div class="cards">
-    <div class="card"><b>⚡ 반응 챌린지</b><p style="font-size:11px;color:#999">빠르게 버튼을 눌러 코인을 얻어요.</p><button onclick="reactionGame()">START</button></div>
-    <div class="card"><b>🎣 낚시</b><p style="font-size:11px;color:#999">오늘은 어떤 물고기가 나올까요?</p><button onclick="fishGame()">낚시하기</button></div>
+  <h1>WORLD</h1>
+  <div class="sub">원하는 장소로 떠나보세요.</div>
+  <div style="margin-top:15px">
+
+    <div class="location-card town" onclick="openLocation('town')">
+      <h3>타운</h3><p>주민들이 모여 사는 작은 마을</p><div class="loc-icon">🏡</div>
+    </div>
+
+    <div class="location-card forest" onclick="openLocation('forest')">
+      <h3>숲</h3><p>나무 사이에 숨겨진 비밀이 있어요.</p><div class="loc-icon">🌳</div>
+    </div>
+
+    <div class="location-card beach" onclick="openLocation('beach')">
+      <h3>비치</h3><p>파도와 조개가 가득한 바닷가</p><div class="loc-icon">🏖️</div>
+    </div>
+
+    <div class="location-card night" onclick="openLocation('night')">
+      <h3>나이트시티</h3><p>밤이 되면 가장 빛나는 도시</p><div class="loc-icon">🌙</div>
+    </div>
+
+    <div class="location-card snow" onclick="openLocation('snow')">
+      <h3>스노우 빌리지</h3><p>눈으로 덮인 따뜻한 마을</p><div class="loc-icon">❄️</div>
+    </div>
+
+    <div class="location-card sky" onclick="openLocation('sky')">
+      <h3>스카이 아일랜드</h3><p>구름 위에 떠 있는 신비한 섬</p><div class="loc-icon">☁️</div>
+    </div>
+
   </div>
 </section>
 
+<!-- LOCATION DETAIL -->
+<section id="location" class="page">
+  <div id="locationContent"></div>
+</section>
+
+<!-- SHOP -->
 <section id="shop" class="page">
-  <div class="sectionTitle"><b>SHOP</b><span>매일 상품이 바뀌어요</span></div>
-  <div class="shopGrid" id="shopGrid"></div>
-</section>
+  <h1>SHOP</h1>
+  <div class="sub">펫과 집을 위한 아이템을 골라보세요.</div>
 
-<section id="more" class="page">
-  <div class="sectionTitle"><b>MY PETTILY</b></div>
-  <div class="cards">
-    <div class="card"><b>🌱 농장</b><p style="font-size:11px;color:#999">작물을 키워요.</p><button onclick="farm()">농장 가기</button></div>
-    <div class="card"><b>🍳 요리</b><p style="font-size:11px;color:#999">재료를 조합해 요리해요.</p><button onclick="cooking()">요리하기</button></div>
-    <div class="card"><b>🏠 하우스</b><p style="font-size:11px;color:#999">내 집을 꾸며보세요.</p><button onclick="house()">꾸미기</button></div>
-    <div class="card"><b>🏆 업적</b><p style="font-size:11px;color:#999">플레이 기록을 확인해요.</p><button onclick="achievements()">확인</button></div>
-    <div class="card"><b>🎒 인벤토리</b><p style="font-size:11px;color:#999">아이템을 확인해요.</p><button onclick="inventory()">열기</button></div>
-    <div class="card"><b>⚙️ 설정</b><p style="font-size:11px;color:#999">게임 설정과 저장 관리</p><button onclick="settings()">설정</button></div>
+  <h2>🪑 집 꾸미기</h2>
+  <div class="grid2" id="furnitureShop"></div>
+
+  <h2>🍓 음식</h2>
+  <div class="grid2">
+    <div class="shop-item">
+      <div class="shop-preview">🍓</div><h3>딸기</h3><p>허기를 회복해요.</p>
+      <button class="btn pink" onclick="buyFood('딸기',30)">30 🪙</button>
+    </div>
+    <div class="shop-item">
+      <div class="shop-preview">🧁</div><h3>컵케이크</h3><p>기분도 좋아져요.</p>
+      <button class="btn pink" onclick="buyFood('컵케이크',70)">70 🪙</button>
+    </div>
   </div>
 </section>
+
+<!-- HOUSE -->
+<section id="house" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div><h1>MY HOUSE</h1><div class="sub">나만의 공간을 꾸며보세요.</div></div>
+    <button class="btn" onclick="go('home')">나가기</button>
+  </div>
+
+  <h2>ROOM 01 · LIVING</h2>
+
+  <div class="room" id="room">
+    <div class="window-room"></div>
+    <div class="wall-line"></div>
+    <div class="empty-text" id="emptyText">아직 아무것도 없어요.<br>가구를 배치해보세요!</div>
+  </div>
+
+  <div class="room-controls">
+    <button class="btn pink" onclick="showFurniture()">🪑 가구 배치</button>
+    <button class="btn" onclick="clearRoom()">🧹 방 비우기</button>
+  </div>
+
+  <h2>보유 가구</h2>
+  <div class="item-picker" id="houseFurniture"></div>
+</section>
+
+<!-- FARM -->
+<section id="farm" class="page">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div><h1>MY FARM</h1><div class="sub">씨앗을 심고 직접 수확하세요.</div></div>
+    <button class="btn" onclick="go('home')">나가기</button>
+  </div>
+
+  <div class="farm" style="margin-top:15px">
+    <div class="farm-house"></div>
+    <div class="plot p1" onclick="farmPlot(0)">🌱</div>
+    <div class="plot p2" onclick="farmPlot(1)">🌱</div>
+    <div class="plot p3" onclick="farmPlot(2)">🌱</div>
+    <div class="plot p4" onclick="farmPlot(3)">🌱</div>
+    <div class="plot p5" onclick="farmPlot(4)">🌱</div>
+  </div>
+
+  <h2>씨앗</h2>
+  <div class="grid3">
+    <button class="btn" onclick="plant('🌷')">🌷<br><small>튤립</small></button>
+    <button class="btn" onclick="plant('🍓')">🍓<br><small>딸기</small></button>
+    <button class="btn" onclick="plant('🌽')">🌽<br><small>옥수수</small></button>
+  </div>
+</section>
+
+<!-- MORE -->
+<section id="more" class="page">
+  <h1>MORE</h1>
+
+  <div class="card" onclick="showCollection()">
+    <b>📖 도감</b><p class="sub">30종의 펫을 수집해보세요.</p>
+  </div>
+  <div class="card" onclick="showInventory()">
+    <b>🎒 인벤토리</b><p class="sub">음식, 가구, 아이템을 확인해요.</p>
+  </div>
+  <div class="card" onclick="showAchievements()">
+    <b>🏆 업적</b><p class="sub">PETTILY에서의 기록.</p>
+  </div>
+  <div class="card" onclick="fishing()">
+    <b>🎣 낚시</b><p class="sub">비치에서 낚시해보세요.</p>
+  </div>
+  <div class="card" onclick="miniGame()">
+    <b>🎮 미니게임</b><p class="sub">펫과 함께 놀아요.</p>
+  </div>
+</section>
+
 </main>
 
-<nav>
-  <button class="navBtn active" onclick="page('home',this)"><strong>⌂</strong>홈</button>
-  <button class="navBtn" onclick="page('pets',this)"><strong>♡</strong>펫</button>
-  <button class="navBtn" onclick="page('world',this)"><strong>♧</strong>월드</button>
-  <button class="navBtn" onclick="page('shop',this)"><strong>◇</strong>상점</button>
-  <button class="navBtn" onclick="page('more',this)"><strong>☰</strong>더보기</button>
+<nav class="bottom">
+  <button class="tab active" data-page="home" onclick="go('home')"><b>⌂</b>홈</button>
+  <button class="tab" data-page="pets" onclick="go('pets')"><b>🐾</b>펫</button>
+  <button class="tab" data-page="world" onclick="go('world')"><b>◉</b>월드</button>
+  <button class="tab" data-page="shop" onclick="go('shop')"><b>🛍</b>상점</button>
+  <button class="tab" data-page="more" onclick="go('more')"><b>☰</b>더보기</button>
 </nav>
 
-<div id="modalBack" class="modalBack" onclick="closeModal(event)">
-  <div class="modal" id="modal"></div>
+<div id="modal">
+  <div class="modal-box" id="modalBox"></div>
 </div>
-<div class="toast" id="toast"></div>
+<div id="effects"></div>
+<div id="toast"></div>
+
 </div>
 
 <script>
+/* =========================
+   DATA
+========================= */
+
 const PETS=[
-["bun","모모","토끼","common","#f4d8df"],["kitten","루미","고양이","common","#e5e0ee"],
-["pup","코코","강아지","common","#e8d0b4"],["hammy","미미","햄스터","common","#e8cba9"],
-["chick","피피","병아리","common","#ffe48e"],["duck","도도","오리","common","#ffe49c"],
-["pig","비비","돼지","common","#ffc6cf"],["mouse","니니","생쥐","common","#ddd4e4"],
-["fox","루루","여우","uncommon","#e6a46c"],["koala","코아","코알라","uncommon","#b9b5ad"],
-["panda","판다","판다","uncommon","#e9e9e9"],["frog","프로그","개구리","uncommon","#91d38e"],
-["otter","오티","수달","uncommon","#b98e70"],["hedge","헤지","고슴도치","uncommon","#c6a27d"],
-["seal","셀리","물개","uncommon","#a9cce2"],["deer","다라","사슴","rare","#d9bfa0"],
-["penguin","핑고","펭귄","rare","#a9cce5"],["redpanda","레나","레서판다","rare","#d98d70"],
-["raccoon","라키","라쿤","rare","#aaa5a4"],["axo","악소","아홀로틀","rare","#efa7bd"],
-["capy","캐피","카피바라","rare","#b78e68"],["unicorn","유니","유니콘","epic","#e7b6ef"],
-["dragon","드라","드래곤","epic","#9ecbe8"],["phoenix","페니","피닉스","epic","#f19b72"],
-["pegasus","페가","페가수스","epic","#d3c3ef"],["mooncat","루나","문캣","legendary","#8998d9"],
-["stardog","노바","스타독","legendary","#9c91d7"],["crystalfox","크리스탈","크리스탈 폭스","legendary","#91d9df"],
-["cloudwhale","웨이비","구름고래","mythic","#d9eaff"],["aurorafox","아우리","오로라 폭스","mythic","#cdb5ee"]
+ {id:"bun",name:"모모",type:"rabbit",rarity:"COMMON",color:"#fff",ear:"#ffb5ca"},
+ {id:"kitten",name:"루미",type:"cat",rarity:"COMMON",color:"#f4c9ae"},
+ {id:"pup",name:"코코",type:"dog",rarity:"COMMON",color:"#c99667"},
+ {id:"hammy",name:"미미",type:"hamster",rarity:"COMMON",color:"#e8b58e"},
+ {id:"chick",name:"피피",type:"chick",rarity:"COMMON",color:"#ffe184"},
+ {id:"duck",name:"도도",type:"duck",rarity:"COMMON",color:"#ffe37e"},
+ {id:"pig",name:"비비",type:"pig",rarity:"COMMON",color:"#ffb5bd"},
+ {id:"mouse",name:"니니",type:"mouse",rarity:"COMMON",color:"#d8c8dc"},
+
+ {id:"fox",name:"루루",type:"fox",rarity:"UNCOMMON",color:"#ee985d"},
+ {id:"koala",name:"코아",type:"koala",rarity:"UNCOMMON",color:"#a9aaa9"},
+ {id:"panda",name:"판다",type:"panda",rarity:"UNCOMMON",color:"#eee"},
+ {id:"frog",name:"프로그",type:"frog",rarity:"UNCOMMON",color:"#83ce7e"},
+ {id:"otter",name:"오티",type:"otter",rarity:"UNCOMMON",color:"#aa765d"},
+ {id:"hedge",name:"헤지",type:"hedge",rarity:"UNCOMMON",color:"#a88670"},
+ {id:"seal",name:"셀리",type:"seal",rarity:"UNCOMMON",color:"#a6c9df"},
+
+ {id:"deer",name:"다라",type:"deer",rarity:"RARE",color:"#c89162"},
+ {id:"penguin",name:"핑고",type:"penguin",rarity:"RARE",color:"#6f7890"},
+ {id:"redpanda",name:"레나",type:"redpanda",rarity:"RARE",color:"#ce765d"},
+ {id:"raccoon",name:"라키",type:"raccoon",rarity:"RARE",color:"#90909a"},
+ {id:"axo",name:"악소",type:"axo",rarity:"RARE",color:"#ff9fb9"},
+ {id:"capy",name:"캐피",type:"capy",rarity:"RARE",color:"#ad896e"},
+
+ {id:"unicorn",name:"유니",type:"unicorn",rarity:"EPIC",color:"#eebfff"},
+ {id:"dragon",name:"드라",type:"dragon",rarity:"EPIC",color:"#a98bdf"},
+ {id:"phoenix",name:"페니",type:"phoenix",rarity:"EPIC",color:"#ff9e70"},
+ {id:"pegasus",name:"페가",type:"pegasus",rarity:"EPIC",color:"#b7d7ff"},
+
+ {id:"mooncat",name:"루나",type:"mooncat",rarity:"LEGENDARY",color:"#aab7ff"},
+ {id:"stardog",name:"노바",type:"stardog",rarity:"LEGENDARY",color:"#7585d9"},
+ {id:"crystalfox",name:"크리스탈",type:"crystalfox",rarity:"LEGENDARY",color:"#a8eff0"},
+
+ {id:"cloudwhale",name:"웨이비",type:"cloudwhale",rarity:"MYTHIC",color:"#c5eaff"},
+ {id:"aurorafox",name:"아우리",type:"aurorafox",rarity:"MYTHIC",color:"#d7b5ff"}
 ];
 
-const rarity={
- common:["COMMON",30],uncommon:["UNCOMMON",30],rare:["RARE",10],
- epic:["EPIC",10],legendary:["LEGENDARY",8],mythic:["MYTHIC",12]
+const LOCATIONS={
+ town:{
+  name:"타운",class:"town-scene",desc:"작은 광장과 카페가 있는 따뜻한 마을",
+  npcs:[
+   {id:"mina",name:"미나",role:"카페 주인",type:"girl",gift:"🍰",lines:[
+    "어서 와! 오늘도 펫과 함께 왔네.",
+    "우리 카페의 딸기 케이크는 정말 맛있어!",
+    "타운 광장에 새로운 소문이 돌고 있대."
+   ]},
+   {id:"leo",name:"레오",role:"상점 주인",type:"boy",gift:"🎁",lines:[
+    "어서 오세요! 오늘 좋은 물건이 들어왔어요.",
+    "가끔 숲에서 희귀한 아이템이 발견된답니다.",
+    "돈을 모아서 멋진 집을 꾸며보세요!"
+   ]},
+   {id:"hana",name:"하나",role:"정원사",type:"girl2",gift:"🌷",lines:[
+    "꽃을 좋아해? 나도 정말 좋아해.",
+    "농장에 물을 잘 주면 예쁜 꽃이 피어.",
+    "오늘은 기분이 아주 좋은 날이야!"
+   ]},
+   {id:"mori",name:"모리",role:"우체국 직원",type:"boy2",gift:"✉️",lines:[
+    "편지가 도착했어요!",
+    "가끔 다른 지역에서 특별한 편지가 와요.",
+    "새로운 친구들과 친해져보세요."
+   ]}
+  ]
+ },
+ forest:{
+  name:"숲",class:"forest-scene",desc:"반짝이는 반딧불과 오래된 나무의 숲",
+  npcs:[
+   {id:"noel",name:"노엘",role:"숲의 안내자",type:"boy",gift:"🍃",lines:[
+    "쉿... 숲에서는 나무의 소리를 들을 수 있어.",
+    "깊은 곳에는 아무에게나 모습을 보이지 않는 장소가 있어.",
+    "길을 잃었다면 내가 도와줄게."
+   ]},
+   {id:"ruru",name:"루루",role:"숲속 친구",type:"fox",gift:"🍄",lines:[
+    "여기까지 찾아오다니 대단한데?",
+    "밤이 되면 반딧불이 훨씬 많이 나타나!",
+    "나랑 숲속 보물 찾기 할래?"
+   ]},
+   {id:"faye",name:"페이",role:"숲의 요정",type:"fairy",gift:"✨",lines:[
+    "숲의 모든 생명은 연결되어 있어.",
+    "착한 마음을 가진 펫은 특별한 빛을 낼 수 있단다.",
+    "오늘도 좋은 하루가 되길!"
+   ]}
+  ]
+ },
+ beach:{
+  name:"비치",class:"beach-scene",desc:"푸른 바다와 조개가 가득한 해변",
+  npcs:[
+   {id:"rin",name:"린",role:"낚시꾼",type:"girl",gift:"🐟",lines:[
+    "파도 소리 좋지 않아?",
+    "조용히 기다리면 희귀한 물고기도 잡을 수 있어.",
+    "낚싯대를 챙겼다면 바다로 가자!"
+   ]},
+   {id:"dodo",name:"도도",role:"라이프가드",type:"boy",gift:"🥤",lines:[
+    "안전하게 놀고 있지?",
+    "해 질 무렵의 비치는 정말 예뻐.",
+    "가끔 모래사장에 반짝이는 조개가 나타나."
+   ]},
+   {id:"shell",name:"셸리",role:"조개 수집가",type:"girl2",gift:"🐚",lines:[
+    "이 조개 정말 예쁘지?",
+    "나는 매일 새로운 조개를 찾고 있어.",
+    "오늘 운이 좋다면 특별한 조개를 발견할지도 몰라!"
+   ]}
+  ]
+ },
+ night:{
+  name:"나이트시티",class:"night-scene",desc:"네온사인과 별빛으로 가득한 밤의 도시",
+  npcs:[
+   {id:"luna",name:"루나",role:"DJ",type:"girl",gift:"🎧",lines:[
+    "밤은 이제부터 시작이야.",
+    "이 도시에서는 밤에만 열리는 가게가 있어.",
+    "네 펫도 음악을 좋아하니?"
+   ]},
+   {id:"nova",name:"노바",role:"야간 상인",type:"boy",gift:"💎",lines:[
+    "좋은 밤이야. 특별한 물건을 찾고 있나?",
+    "별빛이 강한 날에는 희귀한 아이템이 나타나.",
+    "다음에 또 들러."
+   ]},
+   {id:"mimi",name:"미미",role:"길고양이",type:"cat",gift:"🌙",lines:[
+    "야옹.",
+    "밤의 도시는 낮과 전혀 다른 곳이야.",
+    "따라오고 싶다면 조용히 따라와."
+   ]}
+  ]
+ },
+ snow:{
+  name:"스노우 빌리지",class:"snow-scene",desc:"눈꽃과 따뜻한 불빛이 어우러진 겨울 마을",
+  npcs:[
+   {id:"yuki",name:"유키",role:"눈 조각가",type:"girl",gift:"☃️",lines:[
+    "눈으로 무엇이든 만들 수 있어!",
+    "오늘 눈 상태가 아주 좋아.",
+    "멋진 펫 조각상을 만들어볼까?"
+   ]},
+   {id:"cocoa",name:"코코아",role:"카페 직원",type:"girl2",gift:"☕",lines:[
+    "따뜻한 코코아 한 잔 어때?",
+    "추운 날에는 펫도 몸을 따뜻하게 해줘야 해.",
+    "창밖으로 눈을 보면 기분이 좋아진답니다."
+   ]},
+   {id:"pingo",name:"핑고",role:"눈마을 주민",type:"penguin",gift:"🧣",lines:[
+    "펭!",
+    "눈이 많이 오면 특별한 보물이 묻히기도 해.",
+    "같이 찾아볼래?"
+   ]}
+  ]
+ },
+ sky:{
+  name:"스카이 아일랜드",class:"sky-scene",desc:"구름 위에 떠 있는 신비로운 섬",
+  npcs:[
+   {id:"auri",name:"아우리",role:"하늘의 안내자",type:"fairy",gift:"🌈",lines:[
+    "구름 위에 올라온 걸 환영해!",
+    "아래를 내려다보면 모든 지역이 보인단다.",
+    "하늘에서는 특별한 별가루가 떨어져."
+   ]},
+   {id:"wavi",name:"웨이비",role:"구름고래",type:"whale",gift:"☁️",lines:[
+    "우우우웅...",
+    "나는 구름 사이를 헤엄쳐.",
+    "높은 곳에는 아직 아무도 찾지 못한 섬이 있어."
+   ]},
+   {id:"aria",name:"아리아",role:"하늘 상인",type:"girl",gift:"⭐",lines:[
+    "하늘에서만 구할 수 있는 물건들이 있어.",
+    "별을 모으면 특별한 가구도 살 수 있어.",
+    "오늘은 어떤 모험을 할 거야?"
+   ]}
+  ]
+ }
 };
 
-const FOOD=[
-["사과",15,8,"🍎"],["쿠키",25,12,"🍪"],["연어",40,18,"🐟"],
-["케이크",60,25,"🍰"],["별사탕",90,35,"⭐"]
+const FURNITURE=[
+ {id:"sofa",name:"핑크 소파",price:180,cls:"f-sofa",emoji:"🛋️"},
+ {id:"bed",name:"라벤더 침대",price:260,cls:"f-bed",emoji:"🛏️"},
+ {id:"table",name:"원목 테이블",price:140,cls:"f-table",emoji:"🪵"},
+ {id:"rug",name:"하늘 러그",price:120,cls:"f-rug",emoji:"🟦"},
+ {id:"plant",name:"작은 화분",price:90,cls:"f-plant",emoji:"🪴"},
+ {id:"lamp",name:"무드등",price:110,cls:"f-lamp",emoji:"💡"},
+ {id:"books",name:"책장",price:160,cls:"f-books",emoji:"📚"}
 ];
 
-let state=JSON.parse(localStorage.getItem("pettlySave")||"null")||{
- coins:500,gems:20,shards:0,pet:null,owned:[],inventory:{},
- quests:{feed:0,bath:0,play:0,explore:0},daily:0,fish:0,crops:0,
- achievements:[],lastDaily:"",nickname:"PET PARENT"
+/* =========================
+   STATE
+========================= */
+
+let state=JSON.parse(localStorage.getItem("pettly_state")||"null")||{
+ coins:1000,gems:30,
+ pets:[],
+ activePet:null,
+ inventory:[],
+ furniture:[],
+ roomItems:[],
+ friendship:{},
+ visited:{},
+ daily:false,
+ farm:[null,null,null,null,null],
+ fish:0
 };
 
-function save(){localStorage.setItem("pettlySave",JSON.stringify(state))}
-function $(x){return document.getElementById(x)}
-function toast(t){
-  $("toast").textContent=t;$("toast").classList.remove("show");
-  void $("toast").offsetWidth;$("toast").classList.add("show");
-}
-function page(id,btn){
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  $(id).classList.add("active");
-  document.querySelectorAll(".navBtn").forEach(x=>x.classList.remove("active"));
-  btn.classList.add("active");
-  if(id==="pets")renderCollection();
-  if(id==="shop")renderShop();
-}
-function openModal(content){
-  $("modal").innerHTML=content;$("modalBack").classList.add("show");
-}
-function closeModal(e){
-  if(!e || e.target===$("modalBack"))$("modalBack").classList.remove("show");
+function save(){
+ localStorage.setItem("pettly_state",JSON.stringify(state));
+ updateWallet();
 }
 
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-
-/* 실제 SVG 일러스트 펫 */
-function petSVG(type,color="#f0d6dc"){
-  let body=`<ellipse cx="75" cy="91" rx="43" ry="38" fill="${color}"/>`;
-  let extra="";
-  const eye=`<circle cx="60" cy="84" r="3.5" fill="#34313a"/><circle cx="90" cy="84" r="3.5" fill="#34313a"/>`;
-  const blush=`<ellipse cx="52" cy="96" rx="8" ry="4" fill="#ff9eb8" opacity=".45"/><ellipse cx="98" cy="96" rx="8" ry="4" fill="#ff9eb8" opacity=".45"/>`;
-  if(type==="bun")extra=`<ellipse cx="53" cy="31" rx="13" ry="35" fill="${color}"/><ellipse cx="97" cy="31" rx="13" ry="35" fill="${color}"/>`;
-  else if(type==="kitten")extra=`<path d="M38 58L42 26 61 45M112 58L108 26 89 45" fill="${color}"/>`;
-  else if(type==="pup")extra=`<ellipse cx="40" cy="68" rx="18" ry="30" fill="${color}"/><ellipse cx="110" cy="68" rx="18" ry="30" fill="${color}"/>`;
-  else if(type==="hammy")extra=`<circle cx="43" cy="78" r="13" fill="#f2b8a8"/><circle cx="107" cy="78" r="13" fill="#f2b8a8"/>`;
-  else if(type==="chick")extra=`<path d="M66 91h18l-9 9z" fill="#efaa45"/><circle cx="75" cy="39" r="12" fill="#ffd96b"/>`;
-  else if(type==="duck")extra=`<path d="M62 90h27l-14 12z" fill="#ef9d3e"/>`;
-  else if(type==="pig")extra=`<ellipse cx="75" cy="96" rx="17" ry="11" fill="#ee91a2"/><circle cx="69" cy="96" r="2" fill="#70434e"/><circle cx="81" cy="96" r="2" fill="#70434e"/>`;
-  else if(type==="mouse")extra=`<circle cx="45" cy="54" r="18" fill="${color}"/><circle cx="105" cy="54" r="18" fill="${color}"/>`;
-  else if(type==="fox")extra=`<path d="M38 109Q10 130 28 142Q48 137 53 116" fill="#d88658"/><path d="M43 54L53 28 70 48M107 54L97 28 80 48" fill="#d88658"/>`;
-  else if(type==="koala")extra=`<circle cx="42" cy="63" r="18" fill="#aaa7a2"/><circle cx="108" cy="63" r="18" fill="#aaa7a2"/><ellipse cx="75" cy="91" rx="8" ry="6" fill="#555"/>`;
-  else if(type==="panda")extra=`<ellipse cx="55" cy="80" rx="13" ry="18" fill="#45434a" transform="rotate(-25 55 80)"/><ellipse cx="95" cy="80" rx="13" ry="18" fill="#45434a" transform="rotate(25 95 80)"/>`;
-  else if(type==="frog")extra=`<circle cx="53" cy="55" r="16" fill="#91d38e"/><circle cx="97" cy="55" r="16" fill="#91d38e"/><circle cx="53" cy="54" r="4"/><circle cx="97" cy="54" r="4"/>`;
-  else if(type==="otter")extra=`<ellipse cx="48" cy="104" rx="14" ry="25" fill="#a97e63"/><ellipse cx="102" cy="104" rx="14" ry="25" fill="#a97e63"/>`;
-  else if(type==="hedge")extra=`<path d="M35 82L45 48 57 59 67 39 78 57 92 38 98 61 115 50 113 91Z" fill="#9c7d62"/>`;
-  else if(type==="seal")extra=`<ellipse cx="38" cy="111" rx="20" ry="9" fill="#8db8d2"/><ellipse cx="112" cy="111" rx="20" ry="9" fill="#8db8d2"/>`;
-  else if(type==="deer")extra=`<path d="M54 54Q30 20 48 16M48 30L31 25M96 54Q120 20 102 16M112 30L129 25" fill="none" stroke="#8f725c" stroke-width="5" stroke-linecap="round"/>`;
-  else if(type==="penguin")extra=`<ellipse cx="75" cy="97" rx="29" ry="25" fill="#fff"/><path d="M66 87h18l-9 9z" fill="#f0a647"/>`;
-  else if(type==="redpanda")extra=`<path d="M111 105Q145 104 124 132Q109 140 104 119" fill="none" stroke="#b96750" stroke-width="14"/><path d="M44 54L51 30 66 47M106 54L99 30 84 47" fill="#bd7658"/>`;
-  else if(type==="raccoon")extra=`<path d="M108 105Q142 111 119 135" fill="none" stroke="#777" stroke-width="14"/><path d="M43 79Q75 62 107 79L102 96Q75 86 48 96Z" fill="#666"/>`;
-  else if(type==="axo")extra=`<path d="M47 62L28 43M54 66L31 62M103 62L122 43M96 66L119 62" stroke="#ef83a6" stroke-width="7" stroke-linecap="round"/>`;
-  else if(type==="capy")extra=`<ellipse cx="75" cy="98" rx="24" ry="15" fill="#a77c5d"/><circle cx="68" cy="96" r="2"/><circle cx="82" cy="96" r="2"/>`;
-  else if(type==="unicorn")extra=`<path d="M75 55L82 22 91 55Z" fill="#e7a9ef"/><path d="M42 62Q24 78 40 94" fill="none" stroke="#c78de0" stroke-width="9"/>`;
-  else if(type==="dragon")extra=`<path d="M48 58L26 35 49 42M102 58L124 35 101 42" fill="#79b8d8"/><path d="M54 43L64 26M96 43L86 26" stroke="#6898b4" stroke-width="7"/>`;
-  else if(type==="phoenix")extra=`<path d="M49 76Q15 55 22 101Q39 91 53 105M101 76Q135 55 128 101Q111 91 97 105" fill="#ef966c"/><path d="M75 55Q65 35 75 21Q85 35 75 55" fill="#f3bb54"/>`;
-  else if(type==="pegasus")extra=`<path d="M47 69Q10 45 18 83Q29 100 55 91M103 69Q140 45 132 83Q121 100 95 91" fill="#c4b4e7"/>`;
-  else if(type==="mooncat")extra=`<path d="M75 18Q54 37 75 54Q96 37 75 18Z" fill="#fff4a7"/><path d="M43 56L52 30 69 47M107 56L98 30 81 47" fill="#7789cf"/>`;
-  else if(type==="stardog")extra=`<circle cx="75" cy="29" r="14" fill="#ffe99b"/><path d="M75 19L78 27 87 27 80 32 83 40 75 35 67 40 70 32 63 27 72 27Z" fill="#fff"/>`;
-  else if(type==="crystalfox")extra=`<path d="M43 59L54 27 70 48M107 59L96 27 80 48" fill="#8ed9dc"/><path d="M108 105L141 118 113 133Z" fill="#a8edf0" stroke="#72cbd0" stroke-width="3"/>`;
-  else if(type==="cloudwhale")extra=`<path d="M42 105Q14 96 25 80Q34 68 51 77" fill="#d7eaff"/><path d="M105 104Q136 95 126 78" fill="#d7eaff"/><path d="M67 50Q75 29 83 50" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>`;
-  else if(type==="aurorafox")extra=`<path d="M42 58L53 26 70 48M108 58L97 26 80 48" fill="#bca8e8"/><path d="M108 105Q146 110 119 137" fill="none" stroke="#7ce0cb" stroke-width="13"/><path d="M116 108Q139 116 122 128" fill="none" stroke="#f49fce" stroke-width="7"/>`;
-  return `<svg viewBox="0 0 150 150">${extra}${body}${eye}${blush}<path d="M69 104Q75 109 81 104" fill="none" stroke="#51444c" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+function updateWallet(){
+ document.getElementById("coins").textContent=state.coins;
+ document.getElementById("gems").textContent=state.gems;
 }
 
-function petById(id){return PETS.find(p=>p[0]===id)}
-function createPet(p){
-  return {id:p[0],name:p[1],species:p[2],rarity:p[3],hunger:100,clean:100,happy:100,energy:100,love:0,level:1,xp:0,favorite:false}
+/* =========================
+   SVG PET ART
+========================= */
+
+function petSVG(type,color="#fff"){
+ const eyes=`<circle cx="74" cy="88" r="5" fill="#30333d"/><circle cx="126" cy="88" r="5" fill="#30333d"/>`;
+ const mouth=`<path d="M94 105 Q100 112 106 105" fill="none" stroke="#30333d" stroke-width="3" stroke-linecap="round"/>`;
+
+ let extra="";
+ if(type==="rabbit")extra=`<ellipse cx="72" cy="34" rx="16" ry="39" fill="#fff"/><ellipse cx="128" cy="34" rx="16" ry="39" fill="#fff"/>`;
+ if(type==="cat")extra=`<path d="M58 62 L55 28 L82 48 M142 62 L145 28 L118 48" fill="${color}" stroke="#555" stroke-width="3"/>`;
+ if(type==="fox"||type==="redpanda"||type==="crystalfox")extra=`<path d="M55 64 L48 30 L78 45 M145 64 L152 30 L122 45" fill="${color}" stroke="#555" stroke-width="3"/><path d="M155 115 Q190 90 168 70" fill="none" stroke="${color}" stroke-width="20" stroke-linecap="round"/>`;
+ if(type==="dog"||type==="stardog")extra=`<ellipse cx="57" cy="70" rx="20" ry="31" fill="${color}" transform="rotate(-20 57 70)"/><ellipse cx="143" cy="70" rx="20" ry="31" fill="${color}" transform="rotate(20 143 70)"/>`;
+ if(type==="chick"||type==="duck")extra=`<path d="M100 45 Q108 28 116 45" stroke="#f3a13c" stroke-width="5" fill="none"/>`;
+ if(type==="pig")extra=`<ellipse cx="100" cy="105" rx="19" ry="12" fill="#ef8297"/><circle cx="94" cy="105" r="3"/><circle cx="106" cy="105" r="3"/>`;
+ if(type==="panda")extra=`<ellipse cx="68" cy="84" rx="16" ry="22" fill="#30333d"/><ellipse cx="132" cy="84" rx="16" ry="22" fill="#30333d"/>`;
+ if(type==="frog")extra=`<circle cx="70" cy="55" r="16" fill="${color}"/><circle cx="130" cy="55" r="16" fill="${color}"/>`;
+ if(type==="deer")extra=`<path d="M65 52 Q40 18 60 20 M60 30 Q42 12 38 28 M135 52 Q160 18 140 20 M140 30 Q158 12 162 28" fill="none" stroke="#8c694e" stroke-width="7" stroke-linecap="round"/>`;
+ if(type==="penguin")extra=`<ellipse cx="100" cy="105" rx="37" ry="43" fill="#fff"/>`;
+ if(type==="unicorn"||type==="pegasus")extra=`<path d="M100 28 L112 58 L88 58 Z" fill="#ffe47e"/>`;
+ if(type==="dragon")extra=`<path d="M62 70 L25 48 L38 88 M138 70 L175 48 L162 88" fill="${color}" stroke="#715a9d" stroke-width="3"/>`;
+ if(type==="phoenix")extra=`<path d="M65 74 Q25 40 32 112 Q50 92 68 105 M135 74 Q175 40 168 112 Q150 92 132 105" fill="#ffb05e"/>`;
+ if(type==="mooncat")extra=`<circle cx="100" cy="100" r="62" fill="${color}"/><circle cx="125" cy="68" r="25" fill="#dfe4ff"/>`;
+ if(type==="cloudwhale")extra=`<ellipse cx="100" cy="108" rx="80" ry="38" fill="${color}"/><path d="M35 100 Q5 70 15 55 Q42 78 55 80 M165 100 Q195 70 185 55 Q158 78 145 80" fill="${color}"/>`;
+ if(type==="aurorafox")extra=`<path d="M60 60 L50 24 L82 45 M140 60 L150 24 L118 45" fill="${color}"/><path d="M58 115 Q185 40 160 140" fill="none" stroke="#83e4cf" stroke-width="16" stroke-linecap="round"/>`;
+
+ return `<svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+ ${extra}<ellipse cx="100" cy="102" rx="61" ry="56" fill="${color}" stroke="#555" stroke-width="3"/>
+ ${eyes}${mouth}<circle cx="74" cy="101" r="8" fill="#ffb3c5" opacity=".65"/><circle cx="126" cy="101" r="8" fill="#ffb3c5" opacity=".65"/>
+ </svg>`;
 }
+
+/* =========================
+   NAV
+========================= */
+
+function go(page){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ const el=document.getElementById(page);
+ if(el)el.classList.add("active");
+
+ document.querySelectorAll(".tab").forEach(t=>{
+   t.classList.toggle("active",t.dataset.page===page)
+ });
+ document.getElementById("screen").scrollTop=0;
+
+ if(page==="pets")renderPets();
+ if(page==="shop")renderShop();
+ if(page==="house")renderHouse();
+ if(page==="farm")renderFarm();
+ updateWallet();
+}
+
+function openHouse(){
+ go("house");
+ renderHouse();
+}
+
+/* =========================
+   PET SYSTEM
+========================= */
 
 function weightedRarity(){
-  let n=Math.random()*100;
-  for(const r of Object.keys(rarity)){n-=rarity[r][1];if(n<0)return r}
-  return "mythic";
-}
-function randomPet(){
-  const r=weightedRarity();
-  const list=PETS.filter(p=>p[3]===r);
-  return list[Math.floor(Math.random()*list.length)];
+ const r=Math.random()*100;
+ if(r<30)return"COMMON";
+ if(r<60)return"UNCOMMON";
+ if(r<70)return"RARE";
+ if(r<80)return"EPIC";
+ if(r<88)return"LEGENDARY";
+ return"MYTHIC";
 }
 
 function hatch(){
-  const p=randomPet();
-  const pet=createPet(p);
-  state.owned.push(pet);
-  state.pet=pet;
-  save();render();
-  showPetModal(pet,true);
+ const rarity=weightedRarity();
+ const list=PETS.filter(p=>p.rarity===rarity);
+ const pet={...list[Math.floor(Math.random()*list.length)],
+  hunger:80,clean:80,happy:80,energy:80,love:0,level:1,xp:0
+ };
+ state.pets.push(pet);
+ state.activePet=state.pets.length-1;
+ save();
+ showHatch(pet);
+ renderHome();
 }
 
-function openEgg(){
-  openModal(`
-    <button class="close" onclick="closeModal()">×</button>
-    <h2>🥚 PETTILY EGG</h2>
-    <div class="modalSub">알을 열고 새로운 친구를 만나보세요!</div>
-    <div style="background:#f7f4ff;border-radius:24px;padding:30px;text-align:center">
-      <div style="font-size:85px;animation:floatEgg 1.4s infinite alternate">🥚</div>
-      <b>기본 알</b>
-      <p style="font-size:11px;color:#999">부화하면 랜덤한 펫이 등장합니다.</p>
+function showHatch(pet){
+ openModal(`
+  <div class="center">
+   <div style="font-size:12px;color:#999">✨ NEW PET ✨</div>
+   <div style="height:220px;display:flex;align-items:center;justify-content:center">
+    ${petSVG(pet.type,pet.color)}
+   </div>
+   <h1>${pet.name}</h1>
+   <span class="rarity">${pet.rarity}</span>
+   <p class="sub">새로운 친구가 가족이 되었어요!</p>
+   <button class="btn pink" style="width:100%" onclick="closeModal()">만나서 반가워!</button>
+  </div>
+ `);
+}
+
+function activePet(){
+ return state.activePet!=null?state.pets[state.activePet]:null;
+}
+
+function renderHome(){
+ const p=activePet();
+ const hp=document.getElementById("homePet");
+ const name=document.getElementById("homePetName");
+ const stats=document.getElementById("homeStats");
+
+ if(!p){
+  hp.innerHTML=`<div style="font-size:80px">🥚</div>`;
+  name.innerHTML=`<button class="btn pink" onclick="hatch()">🥚 알 부화하기</button>`;
+  stats.innerHTML=`<div class="stat"><strong>?</strong>허기</div><div class="stat"><strong>?</strong>청결</div><div class="stat"><strong>?</strong>행복</div><div class="stat"><strong>?</strong>에너지</div>`;
+  return;
+ }
+
+ hp.innerHTML=`<div class="pet-art" id="mainPet">${petSVG(p.type,p.color)}</div>`;
+ name.textContent=`${p.name} · Lv.${p.level}`;
+ stats.innerHTML=`
+ <div class="stat"><strong>🍓 ${p.hunger}</strong>허기</div>
+ <div class="stat"><strong>🫧 ${p.clean}</strong>청결</div>
+ <div class="stat"><strong>💗 ${p.happy}</strong>행복</div>
+ <div class="stat"><strong>⚡ ${p.energy}</strong>에너지</div>`;
+}
+
+function care(type){
+ const p=activePet();
+ if(!p){toast("먼저 알을 부화해주세요!");return}
+
+ if(type==="eat"){
+  p.hunger=Math.min(100,p.hunger+18);
+  p.happy=Math.min(100,p.happy+3);
+  effect("🍓","냠냠!");
+ }
+ if(type==="bath"){
+  p.clean=Math.min(100,p.clean+22);
+  effect("🫧","뽀득뽀득!");
+ }
+ if(type==="play"){
+  if(p.energy<12){toast("펫이 너무 피곤해요!");return}
+  p.energy-=12;p.happy=Math.min(100,p.happy+20);p.love++;
+  effect("⭐","신난다!");
+ }
+ if(type==="sleep"){
+  p.energy=Math.min(100,p.energy+30);
+  effect("💤","Zzz...");
+ }
+ p.xp+=10;
+ if(p.xp>=100){p.xp=0;p.level++;toast("🎉 펫이 레벨업했어요!")}
+ save();renderHome();
+}
+
+function effect(symbol,text){
+ const e=document.getElementById("effects");
+ for(let i=0;i<7;i++){
+  const x=document.createElement("div");
+  x.className="fx";x.textContent=i===0?text:symbol;
+  x.style.left=(25+Math.random()*50)+"%";
+  x.style.top=(35+Math.random()*25)+"%";
+  x.style.animationDelay=(Math.random()*.15)+"s";
+  e.appendChild(x);
+  setTimeout(()=>x.remove(),900);
+ }
+ const pet=document.getElementById("mainPet");
+ if(pet){pet.classList.add("shake");setTimeout(()=>pet.classList.remove("shake"),700)}
+}
+
+function renderPets(){
+ const box=document.getElementById("petList");
+ if(!state.pets.length){
+  box.innerHTML=`<div class="card center"><div style="font-size:60px">🥚</div><b>아직 펫이 없어요.</b><br><br><button class="btn pink" onclick="hatch()">첫 알 부화하기</button></div>`;
+  return;
+ }
+ box.innerHTML=state.pets.map((p,i)=>`
+  <div class="card pet-card" onclick="selectPet(${i})">
+   <div class="mini-art">${petSVG(p.type,p.color)}</div>
+   <div style="flex:1">
+    <span class="rarity">${p.rarity}</span>
+    <h3 style="margin:5px 0">${p.name}</h3>
+    <div class="sub">Lv.${p.level} · 친밀도 ${p.love}</div>
+    <div class="bar"><i style="width:${p.xp}%"></i></div>
+   </div>
+   ${i===state.activePet?'<b style="color:#ff82ad">사용 중</b>':''}
+  </div>
+ `).join("");
+}
+
+function selectPet(i){
+ state.activePet=i;save();renderHome();renderPets();toast(`${state.pets[i].name}와 함께할게요!`)
+}
+
+/* =========================
+   LOCATION SYSTEM
+========================= */
+
+function sceneHTML(key){
+ if(key==="town")return`
+  <div class="scene town-scene"><div class="sun"></div>
+   <div class="building b1"><div class="window"></div></div>
+   <div class="building b2"><div class="window"></div></div>
+   <div class="building b3"><div class="window"></div></div>
+  </div>`;
+ if(key==="forest")return`
+  <div class="scene forest-scene"><div class="sun"></div>
+   <div class="tree t1"></div><div class="tree t2"></div>
+   <div style="position:absolute;left:48%;bottom:0;width:30px;height:100px;background:#b89262;border-radius:50%"></div>
+   <div style="position:absolute;left:30%;top:75px;font-size:20px">✦</div>
+   <div style="position:absolute;right:28%;top:95px;font-size:16px">✦</div>
+  </div>`;
+ if(key==="beach")return`
+  <div class="scene beach-scene"><div class="sun"></div><div class="wave"></div>
+   <div style="position:absolute;bottom:10px;left:20px;font-size:24px">🐚</div>
+   <div style="position:absolute;bottom:8px;right:35px;font-size:22px">🐚</div>
+  </div>`;
+ if(key==="night")return`
+  <div class="scene night-scene"><div class="moon"></div>
+   <div style="position:absolute;left:20px;top:30px;color:#fff;font-size:12px">✦　✧　✦</div>
+   <div style="position:absolute;right:100px;top:75px;color:#fff;font-size:15px">✦　✦</div>
+   <div class="building b1" style="background:#44456e;box-shadow:inset 0 -10px #6ed8dd"></div>
+   <div class="building b2" style="background:#36375c;box-shadow:inset 0 -10px #ff79b2"></div>
+   <div class="building b3" style="background:#414267;box-shadow:inset 0 -10px #a88bff"></div>
+  </div>`;
+ if(key==="snow")return`
+  <div class="scene snow-scene">
+   <div class="snowball"></div><div class="house"></div>
+   <div style="position:absolute;right:35px;bottom:0;font-size:65px">🌲</div>
+   <div style="position:absolute;right:115px;bottom:30px;font-size:25px">❄️</div>
+  </div>`;
+ return`
+  <div class="scene sky-scene">
+   <div class="cloud c1"></div><div class="cloud c2"></div>
+   <div style="position:absolute;bottom:0;left:0;right:0;height:55px;background:#d8c3f0;border-radius:50% 50% 0 0"></div>
+   <div style="position:absolute;top:25px;right:45px;font-size:35px">🌈</div>
+  </div>`;
+}
+
+function npcSVG(type){
+ let c="#ffd1df";
+ if(type==="boy")c="#a9d5ff";
+ if(type==="boy2")c="#b6e8d4";
+ if(type==="girl2")c="#d7c0ff";
+ if(type==="fox")c="#ee985d";
+ if(type==="cat")c="#d7d0da";
+ if(type==="fairy")c="#b7efdc";
+ if(type==="penguin")c="#66758e";
+ if(type==="whale")c="#a9dcff";
+
+ return `<svg viewBox="0 0 120 120">
+  <circle cx="60" cy="42" r="25" fill="${c}" stroke="#555" stroke-width="2"/>
+  <path d="M32 100 Q60 62 88 100" fill="${c}" stroke="#555" stroke-width="2"/>
+  <circle cx="51" cy="42" r="3" fill="#333"/><circle cx="69" cy="42" r="3" fill="#333"/>
+  <path d="M55 51 Q60 55 65 51" fill="none" stroke="#555" stroke-width="2"/>
+  ${type==="fox"?'<path d="M35 34 L28 12 L48 25 M85 34 L92 12 L72 25" fill="#ee985d"/>':''}
+  ${type==="fairy"?'<circle cx="27" cy="65" r="18" fill="#fff8"/><circle cx="93" cy="65" r="18" fill="#fff8"/>':''}
+ </svg>`;
+}
+
+function openLocation(key){
+ const loc=LOCATIONS[key];
+ state.visited[key]=(state.visited[key]||0)+1;
+ save();
+
+ const html=`
+  <div class="location-top ${loc.class}">
+   ${sceneHTML(key)}
+   <button class="btn" style="position:absolute;top:12px;left:12px" onclick="go('world')">← 월드</button>
+   <h1>${loc.name}</h1>
+   <div class="loc-desc">${loc.desc}</div>
+  </div>
+
+  <div class="card">
+   <div style="display:flex;justify-content:space-between">
+    <b>📍 ${loc.name}</b>
+    <span class="sub">방문 ${state.visited[key]}회</span>
+   </div>
+   <p class="sub">이곳의 주민들과 이야기를 나눠보세요.</p>
+  </div>
+
+  <h2>주민</h2>
+  <div class="npcs">
+   ${loc.npcs.map(n=>`
+    <div class="npc" onclick="talkNPC('${key}','${n.id}')">
+      <div class="npc-avatar">${npcSVG(n.type)}</div>
+      <div class="npc-name">${n.name}</div>
+      <div class="npc-role">${n.role}</div>
+      <div class="heartbar">♥ ${state.friendship[n.id]||0}</div>
     </div>
-    <div class="card" style="margin-top:12px">
-      <b>확률</b>
-      <p class="common">COMMON 30%</p>
-      <p class="uncommon">UNCOMMON 30%</p>
-      <p class="rare">RARE 10%</p>
-      <p class="epic">EPIC 10%</p>
-      <p class="legendary">LEGENDARY 8%</p>
-      <p class="mythic">MYTHIC 12%</p>
-    </div>
-    <button class="bigButton" onclick="closeModal();hatch()">🥚 알 부화시키기</button>
-  `);
+   `).join("")}
+  </div>
+
+  <h2>이곳에서 할 수 있는 일</h2>
+  <div class="loc-actions">
+   <button class="btn" onclick="locationAction('${key}')">🔎<br><small>탐색</small></button>
+   <button class="btn" onclick="locationGift('${key}')">🎁<br><small>보물</small></button>
+   <button class="btn" onclick="locationEvent('${key}')">✨<br><small>이벤트</small></button>
+  </div>
+ `;
+
+ document.getElementById("locationContent").innerHTML=html;
+ go("location");
 }
 
-function showPetModal(pet,newPet=false){
-  const p=petById(pet.id);
-  openModal(`
-    <button class="close" onclick="closeModal()">×</button>
-    <div style="text-align:center">
-      <div style="width:170px;height:170px;margin:auto">${petSVG(p[0],p[4])}</div>
-      <h2>${esc(pet.name)}</h2>
-      <div class="rarity ${pet.rarity}">${rarity[pet.rarity][0]}</div>
-      ${newPet?'<p style="color:#ef87a9;font-weight:900">🎉 새로운 친구가 태어났어요!</p>':''}
-    </div>
-    <div class="modalBtns">
-      <button onclick="setActive('${pet.id}')">⭐ 함께하기</button>
-      <button onclick="renamePet('${pet.id}')">✏️ 이름 변경</button>
-      <button onclick="toggleFavorite('${pet.id}')">♡ 즐겨찾기</button>
-      <button onclick="fusion('${pet.id}')">✨ 합성</button>
-    </div>
-  `);
+function talkNPC(key,npcId){
+ const npc=LOCATIONS[key].npcs.find(n=>n.id===npcId);
+ const f=state.friendship[npcId]||0;
+ const line=npc.lines[Math.floor(Math.random()*npc.lines.length)];
+
+ openModal(`
+  <div class="modal-head">
+   <div><b>${npc.name}</b><div class="sub">${npc.role}</div></div>
+   <button class="close" onclick="closeModal()">×</button>
+  </div>
+  <div style="height:110px;display:flex;justify-content:center">${npcSVG(npc.type)}</div>
+  <div class="dialog npc">${line}</div>
+  <div class="dialog me">안녕! ${npc.name}!</div>
+  <div class="card">
+   <b>♥ 친밀도 ${f}</b>
+   <div class="bar"><i style="width:${Math.min(100,f*10)}%"></i></div>
+  </div>
+  <div class="grid2">
+   <button class="btn pink" onclick="increaseFriendship('${npcId}')">💬 더 이야기하기</button>
+   <button class="btn yellow" onclick="giveGift('${npcId}','${npc.gift}')">🎁 선물하기</button>
+  </div>
+ `);
 }
 
-function setActive(id){
-  state.pet=state.owned.find(x=>x.id===id)||state.pet;save();closeModal();render();toast("이제 "+state.pet.name+"와 함께해요 ♡")
-}
-function renamePet(id){
-  const p=state.owned.find(x=>x.id===id);if(!p)return;
-  const n=prompt("새 이름을 입력하세요",p.name);
-  if(n&&n.trim()){p.name=n.trim();if(state.pet===p)state.pet=p;save();render();toast("이름을 바꿨어요!")}
-}
-function toggleFavorite(id){
-  const p=state.owned.find(x=>x.id===id);if(!p)return;
-  p.favorite=!p.favorite;save();closeModal();render();
+function increaseFriendship(id){
+ state.friendship[id]=(state.friendship[id]||0)+1;
+ state.coins+=10;
+ save();
+ closeModal();
+ toast("💗 친밀도가 올랐어요! +10 🪙");
 }
 
-function effect(type){
-  const layer=$("fxLayer");
-  const wrap=$("petMainArt");
-  if(!layer||!wrap)return;
-  wrap.classList.remove("fxEat","fxBath","fxPlay","fxSleep");
-  void wrap.offsetWidth;
-  wrap.classList.add("fx"+type[0].toUpperCase()+type.slice(1));
-  const r=wrap.getBoundingClientRect(),base=$("app").getBoundingClientRect();
-  const x=r.left-base.left+r.width/2,y=r.top-base.top+r.height/2;
-
-  if(type==="bath"){
-    for(let i=0;i<10;i++){
-      const e=document.createElement("i");e.className="bubble";
-      const z=8+Math.random()*14;
-      e.style.width=z+"px";e.style.height=z+"px";
-      e.style.left=(x-45+Math.random()*90)+"px";e.style.top=(y+20+Math.random()*40)+"px";
-      e.style.setProperty("--x",(Math.random()*70-35)+"px");
-      layer.appendChild(e);setTimeout(()=>e.remove(),850);
-    }
-    fxText("뽀득뽀득!");
-  }
-  if(type==="eat"){
-    ["●","●","✦","●"].forEach((v,i)=>{
-      const e=document.createElement("i");e.className="foodParticle";e.textContent=v;
-      e.style.left=(x-25+i*17)+"px";e.style.top=(y+35)+"px";
-      e.style.setProperty("--x",(Math.random()*30-15)+"px");
-      layer.appendChild(e);setTimeout(()=>e.remove(),700);
-    });
-    for(let i=0;i<5;i++)heart(x,y);
-    fxText("냠냠!");
-  }
-  if(type==="play"){
-    for(let i=0;i<9;i++)star(x,y);
-    fxText("신난다!");
-  }
-  if(type==="sleep"){for(let i=0;i<3;i++){const e=document.createElement("i");e.className="zzz";e.textContent="Z";e.style.left=(x+25+i*10)+"px";e.style.top=(y-30)+"px";layer.appendChild(e);setTimeout(()=>e.remove(),950)}}
-  setTimeout(()=>wrap.className="petWrap",750);
-}
-function fxText(t){
-  const e=document.createElement("div");e.className="petFxText";
-  e.style.cssText="position:absolute;left:50%;top:42%;color:#ef87a9;font-weight:900;font-size:18px;animation:toast .75s ease forwards";
-  e.textContent=t;$("fxLayer").appendChild(e);setTimeout(()=>e.remove(),800);
-}
-function heart(x,y){
-  const e=document.createElement("i");e.className="heart";e.textContent="♥";
-  e.style.left=(x-30+Math.random()*60)+"px";e.style.top=(y+5)+"px";
-  e.style.setProperty("--x",(Math.random()*60-30)+"px");$("fxLayer").appendChild(e);setTimeout(()=>e.remove(),850);
-}
-function star(x,y){
-  const e=document.createElement("i");e.className="star";e.textContent="✦";
-  e.style.left=(x-40+Math.random()*80)+"px";e.style.top=(y-5+Math.random()*40)+"px";
-  e.style.setProperty("--x",(Math.random()*80-40)+"px");$("fxLayer").appendChild(e);setTimeout(()=>e.remove(),800);
+function giveGift(id,gift){
+ state.friendship[id]=(state.friendship[id]||0)+3;
+ state.coins+=35;
+ save();
+ closeModal();
+ effect("💗","선물 성공!");
+ toast(`${gift} 선물 완료! 친밀도 +3`);
 }
 
-function requirePet(){
-  if(!state.pet){openEgg();return false}return true;
-}
-function feedPet(){
-  if(!requirePet())return;
-  const p=state.pet;p.hunger=Math.min(100,p.hunger+18);p.happy=Math.min(100,p.happy+5);p.love++;
-  state.coins=Math.max(0,state.coins-3);state.quests.feed++;
-  save();render();effect("eat");toast("맛있는 간식 냠냠! 🍪");
-}
-function bathPet(){
-  if(!requirePet())return;
-  const p=state.pet;p.clean=100;p.happy=Math.min(100,p.happy+7);p.love++;
-  state.quests.bath++;save();render();effect("bath");toast("깨끗하고 반짝반짝! 🫧");
-}
-function playPet(){
-  if(!requirePet())return;
-  const p=state.pet;p.happy=100;p.energy=Math.max(0,p.energy-8);p.love+=2;
-  state.coins+=5;state.quests.play++;save();render();effect("play");toast("+5 코인 · 같이 놀았어요! 🎾");
-}
-function sleepPet(){
-  if(!requirePet())return;
-  const p=state.pet;p.energy=100;p.happy=Math.min(100,p.happy+5);p.love++;
-  save();render();effect("sleep");toast("푹 자고 일어났어요 💤");
+function locationAction(key){
+ const rewards={
+  town:["🪙 30","🍓 딸기","🌷 꽃"],
+  forest:["🍄 버섯","🍃 잎사귀","✨ 별가루"],
+  beach:["🐚 조개","🐟 물고기","🪙 45"],
+  night:["⭐ 별조각","💎 보석","🎧 카세트"],
+  snow:["❄️ 눈꽃","☕ 코코아","🧣 목도리"],
+  sky:["🌈 무지개 조각","☁️ 구름","⭐ 별가루"]
+ };
+ const r=rewards[key][Math.floor(Math.random()*rewards[key].length)];
+ state.inventory.push(r);
+ state.coins+=20;
+ save();
+ effect("✨","발견!");
+ toast(`${r} 발견! +20 🪙`);
 }
 
-function render(){
-  $("coins").textContent=state.coins;$("gems").textContent=state.gems;
-  const p=state.pet;
-  if(p){
-    const def=petById(p.id);
-    $("petMainArt").innerHTML=petSVG(def[0],def[4]);
-    $("petName").textContent=p.name;
-    $("petMeta").textContent=`${def[2]} · ${rarity[p.rarity][0]} · Lv.${p.level}`;
-    $("hungerBar").style.width=p.hunger+"%";
-    $("cleanBar").style.width=p.clean+"%";
-    $("happyBar").style.width=p.happy+"%";
-    $("energyBar").style.width=p.energy+"%";
-  }else{
-    $("petMainArt").innerHTML=`<div style="font-size:80px">🥚</div>`;
-    $("petName").textContent="첫 번째 펫을 기다리는 중!";
-    $("petMeta").textContent="알을 부화시켜 친구를 만나보세요.";
-    ["hungerBar","cleanBar","happyBar","energyBar"].forEach(x=>$(x).style.width="0%");
-  }
-  renderQuest();
-}
-function renderQuest(){
-  const q=[
-    ["feed","🍖","간식 주기",3,30],
-    ["bath","🫧","씻겨주기",2,25],
-    ["play","🎾","놀아주기",3,35],
-    ["explore","🌳","탐험하기",2,40]
-  ];
-  $("questMini").innerHTML=q.map(x=>`
-    <div class="card quest">
-      <div class="questIcon">${x[1]}</div>
-      <div style="flex:1"><b>${x[2]}</b><br><small>${Math.min(state.quests[x[0]],x[3])}/${x[3]}</small></div>
-      <button onclick="claimQuest('${x[0]}',${x[3]},${x[4]})" style="width:auto;padding:8px 10px">+${x[4]}</button>
-    </div>`).join("");
-}
-function claimQuest(k,max,reward){
-  if((state.quests[k]||0)>=max){
-    state.quests[k]-=max;state.coins+=reward;save();render();toast("퀘스트 보상 +"+reward+" 🪙");
-  }else toast("아직 퀘스트가 완료되지 않았어요!");
-}
-function openQuest(){
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>📋 오늘의 퀘스트</h2><div class="modalSub">펫과 함께하면 자연스럽게 완료돼요.</div>${$("questMini").innerHTML}`);
-}
-function dailyReward(){
-  const today=new Date().toDateString();
-  if(state.lastDaily===today){toast("오늘 보상은 이미 받았어요!");return}
-  state.lastDaily=today;state.coins+=100;state.gems+=3;save();render();toast("🎁 +100 코인 +3 젬!");
+function locationGift(key){
+ const rewards=["🪙 50","💎 2","🎁 선물상자","✨ 희귀 조각"];
+ const r=rewards[Math.floor(Math.random()*rewards.length)];
+ if(r.includes("🪙"))state.coins+=50;
+ if(r.includes("💎"))state.gems+=2;
+ state.inventory.push(r);
+ save();
+ toast(`🎁 ${r}을(를) 발견했어요!`);
 }
 
-function renderCollection(){
-  const search=($("petSearch")?.value||"").toLowerCase();
-  $("collectionCount").textContent=`${new Set(state.owned.map(x=>x.id)).size} / ${PETS.length}`;
-  $("collection").innerHTML=PETS.filter(p=>!search||p[1].includes(search)||p[2].includes(search))
-  .map(p=>{
-    const own=state.owned.filter(x=>x.id===p[0]);
-    const pet=own[0];
-    return `<div class="petCard" onclick="${pet?`showPetModal(state.owned.find(x=>x.id==='${p[0]}'))`:''}">
-      <div class="petThumb" style="${pet?'':'filter:grayscale(1);opacity:.25'}">${pet?petSVG(p[0],p[4]):'<div style="font-size:40px">?</div>'}</div>
-      <b>${pet?pet.name:"???"}</b>
-      <div class="rarity ${p[3]}">${rarity[p[3]][0]}</div>
-    </div>`
-  }).join("");
+function locationEvent(key){
+ const events={
+  town:"광장 분수에서 반짝이는 동전을 발견했어요!",
+  forest:"숲속에서 신비한 빛이 나타났어요!",
+  beach:"파도에 밀려온 특별한 조개를 발견했어요!",
+  night:"네온 간판 사이에서 별빛이 떨어졌어요!",
+  snow:"눈더미 속에서 작은 선물상자를 발견했어요!",
+  sky:"구름 사이로 무지개가 나타났어요!"
+ };
+ state.coins+=60;
+ save();
+ openModal(`
+  <div class="center">
+   <div style="font-size:60px">✨</div>
+   <h2>지역 이벤트!</h2>
+   <p>${events[key]}</p>
+   <b>🪙 60 코인을 획득했습니다.</b>
+   <br><br><button class="btn pink" onclick="closeModal()">좋아!</button>
+  </div>
+ `);
 }
 
-const SHOP=[
-["사과","🍎",15,"food"],["쿠키","🍪",25,"food"],["연어","🐟",40,"food"],
-["케이크","🍰",60,"food"],["공","🎾",35,"toy"],["방석","🛏️",80,"furniture"],
-["꽃","🌷",45,"furniture"],["하우스 램프","🪔",120,"furniture"]
-];
+/* =========================
+   HOUSE
+========================= */
+
+function renderHouse(){
+ const room=document.getElementById("room");
+ room.querySelectorAll(".furniture").forEach(x=>x.remove());
+
+ if(!state.roomItems.length){
+  document.getElementById("emptyText").style.display="block";
+ }else{
+  document.getElementById("emptyText").style.display="none";
+  state.roomItems.forEach((item,i)=>{
+   const f=FURNITURE.find(x=>x.id===item.id);
+   if(!f)return;
+   const el=document.createElement("div");
+   el.className=`furniture ${f.cls}`;
+   el.style.left=item.x+"%";
+   el.style.top=item.y+"%";
+   el.title="클릭해서 제거";
+   el.innerHTML=f.cls.includes("f-")&&f.id!=="sofa"&&f.id!=="bed"&&f.id!=="table"&&f.id!=="rug"?"":(
+    f.id==="sofa"?"":f.id==="bed"?"":f.id==="table"?"":f.id==="rug"?"":f.emoji
+   );
+   if(["plant","lamp","books"].includes(f.id))el.innerHTML=f.emoji;
+   el.onclick=()=>removeRoomItem(i);
+   room.appendChild(el);
+  });
+ }
+
+ const owned=state.furniture.map(id=>FURNITURE.find(f=>f.id===id)).filter(Boolean);
+ document.getElementById("houseFurniture").innerHTML=owned.length?
+ owned.map(f=>`<div class="decor-item" onclick="placeFurniture('${f.id}')"><div class="preview">${f.emoji}</div>${f.name}<br><small>배치</small></div>`).join("")
+ :`<div class="card" style="grid-column:1/4;text-align:center">보유한 가구가 없어요.<br>상점에서 가구를 구매해보세요.</div>`;
+}
+
+function showFurniture(){
+ renderHouse();
+ document.getElementById("houseFurniture").scrollIntoView({behavior:"smooth"});
+}
+
+function placeFurniture(id){
+ const f=FURNITURE.find(x=>x.id===id);
+ state.roomItems.push({
+  id,x:20+Math.random()*60,y:48+Math.random()*35
+ });
+ save();renderHouse();
+ toast(`${f.name}을(를) 방에 배치했어요!`);
+}
+
+function removeRoomItem(i){
+ state.roomItems.splice(i,1);save();renderHouse();toast("가구를 치웠어요.");
+}
+
+function clearRoom(){
+ if(!state.roomItems.length){toast("이미 빈 방이에요.");return}
+ state.roomItems=[];save();renderHouse();toast("방을 깨끗하게 비웠어요.");
+}
+
 function renderShop(){
-  $("shopGrid").innerHTML=SHOP.map((x,i)=>`
-  <div class="shopItem"><div class="shopIcon">${x[1]}</div><b>${x[0]}</b><small>${x[2]} 🪙</small>
-  <button onclick="buyItem(${i})">구매</button></div>`).join("");
-}
-function buyItem(i){
-  const x=SHOP[i];
-  if(state.coins<x[2]){toast("코인이 부족해요!");return}
-  state.coins-=x[2];state.inventory[x[0]]=(state.inventory[x[0]]||0)+1;
-  save();render();toast(x[0]+" 구매 완료! 🛍️");
-}
-
-function explore(place){
-  if(!requirePet())return;
-  const rewards=[
-    ["🪙",20,45],["💎",1,20],["🎁",1,15],["🧩",3,10],["🐟",1,10]
-  ];
-  const r=Math.random()*100;let sum=0,got=rewards[0];
-  for(const a of rewards){sum+=a[2];if(r<sum){got=a;break}}
-  state.coins+=got[0]==="🪙"?got[1]:0;
-  if(got[0]==="💎")state.gems+=got[1];
-  state.quests.explore++;state.pet.love++;save();render();
-  toast(place+"에서 "+got[0]+" 발견! +"+got[1]);
+ const box=document.getElementById("furnitureShop");
+ box.innerHTML=FURNITURE.map(f=>`
+  <div class="shop-item">
+   <div class="shop-preview">${f.emoji}</div>
+   <h3>${f.name}</h3>
+   <p>집에 배치할 수 있어요.</p>
+   <button class="btn pink" onclick="buyFurniture('${f.id}')">${f.price} 🪙</button>
+  </div>
+ `).join("");
 }
 
-function reactionGame(){
-  let n=0;
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>⚡ 반응 챌린지</h2><div class="modalSub">버튼이 나타나면 빠르게 눌러보세요!</div><div id="reactionArea" style="height:210px;display:grid;place-items:center"></div>`);
+function buyFurniture(id){
+ const f=FURNITURE.find(x=>x.id===id);
+ if(state.coins<f.price){toast("코인이 부족해요!");return}
+ state.coins-=f.price;
+ state.furniture.push(id);
+ save();
+ toast(`${f.name} 구매 완료!`);
+}
+
+/* =========================
+   FARM
+========================= */
+
+function renderFarm(){
+ const plots=document.querySelectorAll(".plot");
+ state.farm.forEach((x,i)=>{
+  plots[i].textContent=x?.emoji||"🌱";
+ });
+}
+
+function plant(emoji){
+ const i=state.farm.findIndex(x=>!x);
+ if(i<0){toast("밭이 꽉 찼어요!");return}
+ state.farm[i]={emoji,ready:false,time:Date.now()};
+ save();renderFarm();
+ toast("🌱 씨앗을 심었어요! 잠시 후 자라요.");
+ setTimeout(()=>{
+  if(state.farm[i]){
+   state.farm[i].ready=true;save();renderFarm();toast("🌟 작물이 다 자랐어요!");
+  }
+ },5000);
+}
+
+function farmPlot(i){
+ const x=state.farm[i];
+ if(!x){toast("먼저 씨앗을 심어주세요.");return}
+ if(!x.ready){toast("아직 자라는 중이에요!");return}
+ state.coins+=50;state.farm[i]=null;save();renderFarm();
+ toast("🌾 수확 완료! +50 🪙");
+}
+
+/* =========================
+   MORE
+========================= */
+
+function showCollection(){
+ openModal(`
+  <div class="modal-head"><h2>📖 펫 도감</h2><button class="close" onclick="closeModal()">×</button></div>
+  <div class="grid3">
+   ${PETS.map(p=>{
+    const owned=state.pets.some(x=>x.id===p.id);
+    return `<div class="card center" style="padding:7px;opacity:${owned?1:.35}">
+      <div style="height:70px">${owned?petSVG(p.type,p.color):"?"}</div>
+      <small>${owned?p.name:"???"}</small><br><span class="rarity">${p.rarity}</span>
+    </div>`
+   }).join("")}
+  </div>
+ `);
+}
+
+function showInventory(){
+ openModal(`
+  <div class="modal-head"><h2>🎒 인벤토리</h2><button class="close" onclick="closeModal()">×</button></div>
+  ${state.inventory.length?
+   state.inventory.map(x=>`<div class="card"><b>${x}</b></div>`).join("")
+   :`<div class="card center">아직 아이템이 없어요.</div>`}
+ `);
+}
+
+function showAchievements(){
+ const list=[
+  ["🐣","첫 번째 펫","펫을 한 마리 만나기",state.pets.length>=1],
+  ["🌍","세계 여행자","장소 방문하기",Object.keys(state.visited).length>=3],
+  ["💗","친구 만들기","주민과 친해지기",Object.values(state.friendship).some(x=>x>=3)],
+  ["🏠","인테리어 시작","가구 배치하기",state.roomItems.length>=1],
+  ["🌱","농부","작물 수확하기",state.coins>1000]
+ ];
+ openModal(`
+  <div class="modal-head"><h2>🏆 업적</h2><button class="close" onclick="closeModal()">×</button></div>
+  ${list.map(x=>`<div class="card" style="opacity:${x[3]?1:.45}">
+   <b>${x[0]} ${x[1]}</b><p class="sub">${x[2]}</p>${x[3]?"✓ 달성":"미달성"}
+  </div>`).join("")}
+ `);
+}
+
+function fishing(){
+ if(state.coins<10){toast("낚시하려면 10코인이 필요해요.");return}
+ state.coins-=10;
+ const fish=["🐟","🐠","🐡","🦀","🦑","🐙"];
+ const f=fish[Math.floor(Math.random()*fish.length)];
+ state.inventory.push(f);state.fish++;state.coins+=30;
+ save();
+ openModal(`
+  <div class="center">
+   <div style="font-size:80px">🎣</div>
+   <h2>낚시 성공!</h2>
+   <div style="font-size:60px">${f}</div>
+   <b>${f}을 잡았어요!</b>
+   <p class="sub">판매해서 30 🪙을 얻었습니다.</p>
+   <button class="btn pink" onclick="closeModal()">계속</button>
+  </div>
+ `);
+}
+
+function miniGame(){
+ let score=0;
+ openModal(`
+  <div class="center">
+   <h2>🎮 별 잡기</h2>
+   <p class="sub">20초 동안 나타나는 별을 눌러보세요!</p>
+   <div id="gameArea" style="height:230px;background:#f0efff;border-radius:20px;position:relative;overflow:hidden">
+    <button id="starBtn" onclick="hitStar()" style="position:absolute;background:none;font-size:40px;left:45%;top:40%">⭐</button>
+   </div>
+   <h3 id="gameScore">SCORE 0</h3>
+  </div>
+ `);
+ window.gameScore=0;
+ window.gameTimer=setInterval(()=>{
+  if(!document.getElementById("starBtn")){
+   clearInterval(window.gameTimer);return;
+  }
+  const s=document.getElementById("starBtn");
+  s.style.left=(5+Math.random()*80)+"%";
+  s.style.top=(5+Math.random()*75)+"%";
+ },700);
+ setTimeout(()=>{
+  clearInterval(window.gameTimer);
+  if(document.getElementById("starBtn")){
+   state.coins+=window.gameScore*5;save();
+   closeModal();toast(`게임 종료! ${window.gameScore*5} 🪙 획득!`);
+  }
+ },20000);
+}
+
+function hitStar(){
+ window.gameScore++;
+ const s=document.getElementById("starBtn");
+ if(s){
+  s.style.left=(5+Math.random()*80)+"%";
+  s.style.top=(5+Math.random()*75)+"%";
+ }
+ const sc=document.getElementById("gameScore");
+ if(sc)sc.textContent="SCORE "+window.gameScore;
+}
+
+/* =========================
+   REWARD / FOOD
+========================= */
+
+function dailyReward(){
+ if(state.daily){toast("오늘은 이미 받았어요!");return}
+ state.daily=true;state.coins+=100;save();
+ toast("🎁 오늘의 보상 +100 🪙!");
+}
+
+function buyFood(name,price){
+ if(state.coins<price){toast("코인이 부족해요!");return}
+ state.coins-=price;
+ state.inventory.push("🍓 "+name);
+ save();
+ toast(`${name}을 구매했어요!`);
+}
+
+/* =========================
+   MODAL / TOAST
+========================= */
+
+function openModal(html){
+ document.getElementById("modalBox").innerHTML=html;
+ document.getElementById("modal").classList.add("show");
+}
+
+function closeModal(){
+ document.getElementById("modal").classList.remove("show");
+}
+
+document.getElementById("modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")closeModal();
+});
+
+let toastTimer;
+function toast(msg){
+ const t=document.getElementById("toast");
+ t.textContent=msg;t.classList.add("show");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>t.classList.remove("show"),1800);
+}
+
+/* =========================
+   INIT
+========================= */
+
+function init(){
+ updateWallet();
+ renderHome();
+ renderShop();
+ renderHouse();
+ renderFarm();
+
+ // 처음 실행하면 알 화면
+ if(!state.pets.length){
   setTimeout(()=>{
-    const a=$("reactionArea");if(!a)return;
-    a.innerHTML=`<button style="width:110px;height:110px;border-radius:50%;background:#ffb8cf;font-weight:900;font-size:20px" onclick="winReaction()">TAP!</button>`;
-  },700+Math.random()*1000);
-}
-function winReaction(){
-  state.coins+=Math.floor(20+Math.random()*41);save();render();closeModal();toast("⚡ 성공! 코인을 획득했어요!");
-}
-function fishGame(){
-  const fish=["🐟 작은 물고기","🐠 열대어","🦀 게","🐡 복어","🌟 반짝 물고기"];
-  const f=fish[Math.floor(Math.random()*fish.length)];
-  const reward=Math.floor(10+Math.random()*35);
-  state.coins+=reward;state.fish++;save();render();
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🎣 낚시 성공!</h2><div style="font-size:75px;text-align:center;margin:20px">${f.split(" ")[0]}</div><p style="text-align:center">${f.substring(f.indexOf(" ")+1)}</p><div class="card" style="text-align:center">+${reward} 🪙</div>`);
+   openModal(`
+    <div class="center">
+     <div style="font-size:12px;color:#999">WELCOME TO</div>
+     <h1>PETTILY</h1>
+     <div style="font-size:100px;animation:float 1.5s infinite">🥚</div>
+     <p>알을 부화하고 나만의 펫 월드를 만들어보세요.</p>
+     <button class="btn pink" style="width:100%" onclick="closeModal();hatch()">✨ 첫 알 부화하기</button>
+    </div>
+   `);
+  },400);
+ }
 }
 
-function farm(){
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🌱 작은 농장</h2><div class="modalSub">작물을 심고 수확해서 재료로 사용하세요.</div>
-  <div class="cards"><div class="card">🥕 당근<br><small>성장 완료</small><button onclick="harvest('당근',20)">수확 +20</button></div>
-  <div class="card">🍓 딸기<br><small>성장 완료</small><button onclick="harvest('딸기',30)">수확 +30</button></div>
-  <div class="card">🎃 호박<br><small>성장 완료</small><button onclick="harvest('호박',45)">수확 +45</button></div>
-  <div class="card">🌽 옥수수<br><small>성장 완료</small><button onclick="harvest('옥수수',35)">수확 +35</button></div></div>`);
-}
-function harvest(name,value){
-  state.inventory[name]=(state.inventory[name]||0)+1;state.coins+=value;
-  state.crops++;save();render();closeModal();toast(name+" 수확 완료! 🌱");
-}
-
-function cooking(){
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🍳 펫 키친</h2><div class="modalSub">맛있는 음식을 만들어 펫에게 선물하세요.</div>
-  <div class="cards">
-  <div class="card"><b>🍓 베리 토스트</b><p>딸기 + 빵</p><button onclick="cook('베리 토스트',30)">요리하기</button></div>
-  <div class="card"><b>🥕 당근 케이크</b><p>당근 + 케이크</p><button onclick="cook('당근 케이크',45)">요리하기</button></div>
-  <div class="card"><b>🎃 호박파이</b><p>호박 + 밀가루</p><button onclick="cook('호박파이',55)">요리하기</button></div>
-  <div class="card"><b>⭐ 스타 파르페</b><p>특별 레시피</p><button onclick="cook('스타 파르페',80)">요리하기</button></div>
-  </div>`);
-}
-function cook(name,value){
-  state.inventory[name]=(state.inventory[name]||0)+1;state.coins+=value;
-  save();render();closeModal();toast("🍳 "+name+" 완성!");
-}
-
-function house(){
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🏠 MY HOUSE</h2><div class="modalSub">내 펫이 쉬어가는 작은 집이에요.</div>
-  <div style="padding:30px;border-radius:25px;background:linear-gradient(#eaf6ff,#fff1f7);text-align:center">
-  <div style="font-size:80px">🏡</div><b>Cloud Room</b><p style="font-size:11px;color:#999">가구를 구매해서 꾸며보세요!</p></div>
-  <div class="modalBtns"><button onclick="buyHouse('소파',100)">🛋️ 소파 100</button><button onclick="buyHouse('침대',150)">🛏️ 침대 150</button><button onclick="buyHouse('식물',70)">🪴 식물 70</button><button onclick="buyHouse('그네',180)">🎠 그네 180</button></div>`);
-}
-function buyHouse(name,cost){
-  if(state.coins<cost){toast("코인이 부족해요!");return}
-  state.coins-=cost;state.inventory[name]=(state.inventory[name]||0)+1;
-  save();render();toast(name+"을 집에 놓았어요! 🏠");closeModal();
-}
-
-function achievements(){
-  const data=[
-    ["🐣","첫 친구","첫 번째 펫을 부화시키세요",state.owned.length>=1],
-    ["♡","애정 가득","펫과 10번 상호작용",state.pet?.love>=10],
-    ["🥚","알 수집가","펫 5마리 모으기",state.owned.length>=5],
-    ["🌳","탐험가","탐험 5회",state.quests.explore>=5],
-    ["🎣","낚시꾼","낚시 5회",state.fish>=5],
-    ["🌱","가드너","작물 5개 수확",state.crops>=5],
-    ["🪙","부자 펫부모","코인 1000개 모으기",state.coins>=1000],
-    ["✨","레어 발견","레어 이상 펫 보유",state.owned.some(x=>["rare","epic","legendary","mythic"].includes(x.rarity))],
-    ["🌈","미식 친구","미식 펫 보유",state.owned.some(x=>x.rarity==="mythic")]
-  ];
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🏆 업적</h2><div class="modalSub">플레이하면서 자연스럽게 달성해보세요.</div>${data.map(x=>`
-  <div class="card" style="margin-bottom:8px;opacity:${x[3]?1:.5}"><b>${x[0]} ${x[1]}</b><p style="font-size:11px;color:#999;margin:5px 0">${x[2]}</p>${x[3]?"✓ 달성":"🔒 미달성"}</div>`).join("")}`);
-}
-
-function inventory(){
-  const entries=Object.entries(state.inventory);
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>🎒 인벤토리</h2><div class="modalSub">가지고 있는 아이템</div>
-  ${entries.length?entries.map(x=>`<div class="card" style="margin-bottom:7px"><b>${x[0]}</b><span style="float:right">${x[1]}개</span></div>`).join(""):"<p style='color:#999;text-align:center;padding:30px'>아직 아이템이 없어요.</p>"}`);
-}
-
-function fusion(id){
-  const same=state.owned.filter(x=>x.id===id);
-  if(same.length<2){toast("같은 펫이 2마리 필요해요!");return}
-  const keep=same[0],remove=same[1];
-  state.owned=state.owned.filter(x=>x!==remove);
-  keep.level++;keep.xp=0;keep.love+=10;
-  state.shards+=5;save();render();closeModal();toast("✨ 펫 합성 성공! Lv."+keep.level);
-}
-
-function settings(){
-  openModal(`<button class="close" onclick="closeModal()">×</button><h2>⚙️ 설정</h2>
-  <label style="font-size:11px;color:#999">닉네임</label>
-  <input id="nickInput" value="${esc(state.nickname)}">
-  <button class="bigButton" onclick="saveNick()">저장</button>
-  <div class="card" style="margin-top:12px"><b>게임 데이터</b><p style="font-size:11px;color:#999">현재 기기에 자동 저장됩니다.</p>
-  <button onclick="exportSave()" style="width:100%;padding:10px;border-radius:12px;background:#eee;font-weight:800">저장 데이터 복사</button>
-  <button onclick="resetGame()" style="width:100%;padding:10px;border-radius:12px;background:#ffe5e5;font-weight:800;margin-top:7px">처음부터 다시</button></div>`);
-}
-function saveNick(){
-  state.nickname=$("nickInput").value||"PET PARENT";save();closeModal();toast("닉네임을 저장했어요!");
-}
-function exportSave(){
-  navigator.clipboard?.writeText(JSON.stringify(state));
-  toast("저장 데이터를 복사했어요!");
-}
-function resetGame(){
-  if(confirm("정말 처음부터 시작할까요?")){
-    localStorage.removeItem("pettlySave");location.reload();
-  }
-}
-
-setInterval(()=>{
-  if(state.pet){
-    state.pet.hunger=Math.max(0,state.pet.hunger-.25);
-    state.pet.clean=Math.max(0,state.pet.clean-.12);
-    if(state.pet.hunger<25)state.pet.happy=Math.max(0,state.pet.happy-.1);
-    save();render();
-  }
-},30000);
-
-function weather(){
-  const w=[
-    ["☀️","맑음"],["☁️","구름"],["🌧️","비"],["✨","반짝이는 밤"]
-  ][Math.floor(Math.random()*4)];
-  $("weatherText").textContent=w[0]+" "+w[1]+" · 오늘의 펫 월드";
-  $("weatherSmall").textContent=w[0]+" "+w[1];
-}
-weather();render();renderShop();renderCollection();
+init();
 </script>
 </body>
 </html>
